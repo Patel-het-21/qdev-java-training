@@ -7,8 +7,8 @@ package practicals;
  */
 public class ConstructorExample {
 
-	int number1;
-    int number2;
+	int number1; 
+    int number2; 
 
     /**
      * Default constructor
@@ -39,6 +39,11 @@ public class ConstructorExample {
         System.out.println("Product  : " + (number1 * number2)); 
     }
 
+    /**
+     * This is the main method, the entry point for the Java application.
+     *
+     * @param args Command-line arguments (not used)
+    */
 	public static void main(String[] args) {
 		
 		System.out.println("Using default constructor:"); 

@@ -37,6 +37,11 @@ public class EMICalculator {
 		return emi; 
 	}
 	
+	/**
+     * This is the main method, the entry point for the Java application.
+     *
+     * @param args Command-line arguments (not used)
+    */
 	public static void main(String args[]) {
 		Scanner scanner = new Scanner(System.in); 
 		
