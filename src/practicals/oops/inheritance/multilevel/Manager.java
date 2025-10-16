@@ -1,14 +1,32 @@
 package practicals.oops.inheritance.multilevel;
 
-public class Manager extends Employee{
+/**
+ * Represents a manager, which is a subclass of Employee (and indirectly of
+ * Person). Adds manager-specific field (department).
+ * 
+ * Demonstrates multi-level inheritance: Person → Employee → Manager
+ * 
+ * @author Het
+ * @since 14/10/25
+ */
+public class Manager extends Employee {
 	String department;
 
-    public void setDepartment(String dept) {
-        this.department = dept;
-    }
+	/**
+	 * Sets the manager's department.
+	 * 
+	 * @param dept Department name
+	 */
+	public void setDepartment(String dept) {
+		this.department = dept;
+	}
 
-    public void displayManager() {
-        displayEmployee(); // from Employee and Person
-        System.out.println("Department: " + department);
-    }
+	/**
+	 * Displays manager details: name, employee ID, and department.
+	 */
+	public void displayManager() {
+		displayEmployee(); // calls displayName() too
+		System.out.println("Department: " + department);
+	}
+
 }

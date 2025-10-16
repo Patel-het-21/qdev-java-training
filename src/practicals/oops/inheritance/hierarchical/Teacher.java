@@ -1,14 +1,29 @@
 package practicals.oops.inheritance.hierarchical;
 
-public class Teacher extends Person{
+/**
+ * Represents a teacher, which is a subclass of Person. Adds a subject field
+ * specific to teachers.
+ * 
+ * @author Het Patel
+ * @since 14/10/25
+ */
+public class Teacher extends Person {
 	String subject;
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
+	/**
+	 * Set the subject name
+	 * 
+	 * @param subject subject name
+	 */
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
 
-    public void displayTeacher() {
-        displayName();
-        System.out.println("Teaches: " + subject);
-    }
+	/**
+	 * Display teacher name and subject
+	 */
+	public void displayTeacher() {
+		displayName();
+		System.out.println("Teaches: " + subject);
+	}
 }

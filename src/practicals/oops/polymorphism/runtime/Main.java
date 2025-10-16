@@ -1,9 +1,11 @@
 package practicals.oops.polymorphism.runtime;
 
-/*
- * Author : Het Patel 
- * Date : 15/10/25
- * Description : Implement runtime polymorphisam
+/**
+ * Implements runtime polymorphism using method overriding. Demonstrates how
+ * different animal types respond to the same method.
+ * 
+ * @author Het Patel
+ * @since 15/10/25
  */
 public class Main {
 
@@ -13,23 +15,21 @@ public class Main {
 	 * @param args Command-line arguments (not used)
 	 */
 	public static void main(String[] args) {
-		
-		//create animal object 
-		Animal animal = new Animal();
-		
-		//call animal class make sound method
-		animal.makeSound();
-		
-		//create dog class object with reference to animal
-		Animal dog = new Dog();
-		
-		//call animal class makeSound method
-		dog.makeSound();
-		
-		//create cat class object with reference to animal
-		Animal cat = new Cat();
 
-		//call animal class make sound method
+		/**
+		 * Create Animal object
+		 */
+		Animal animal = new Animal();
+		animal.makeSound();
+		/**
+		 * Create Dog object with Animal reference
+		 */
+		Animal dog = new Dog();
+		dog.makeSound();
+		/**
+		 *  Create Cat object with Animal reference
+		 */
+		Animal cat = new Cat();
 		cat.makeSound();
 	}
 

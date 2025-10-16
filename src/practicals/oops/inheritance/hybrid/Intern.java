@@ -2,73 +2,90 @@ package practicals.oops.inheritance.hybrid;
 
 import java.util.Scanner;
 
-/*
- * 	Author : Patel Het
- * 	Date : 15/10/25
- * 	Description : Implement hybrid inheritance 
+/**
+ * Represents an Intern, which extends the Student class and implements the
+ * Employee interface. Demonstrates hybrid inheritance in Java (class +
+ * interface). Combines personal, academic, and job-related details in one
+ * class.
+ * 
+ * @author Het
+ * @since 15/10/25
  */
-public class Intern extends Student implements Employee{
-	
+public class Intern extends Student implements Employee {
 	private String jobTitle;
 	private double salary;
-	
-	
+
+	/**
+	 * Constructor to initialize all intern details.
+	 * 
+	 * @param name       Name of the intern
+	 * @param age        Age of the intern
+	 * @param course     Course the intern is studying
+	 * @param university University of the intern
+	 * @param jobTitle   Job title of the intern
+	 * @param salary     Salary or stipend of the intern
+	 */
 	public Intern(String name, int age, String course, String university, String jobTitle, double salary) {
 		super(name, age, course, university);
 		this.jobTitle = jobTitle;
 		this.salary = salary;
 	}
 
+	/**
+	 * Displays the job title of the intern.
+	 */
 	@Override
 	public void getJobTitle() {
 		System.out.println("Job Title : " + jobTitle);
 	}
 
+	/**
+	 * Displays the salary or stipend of the intern.
+	 */
 	@Override
 	public void getSalary() {
 		System.out.println("Salary : " + salary);
 	}
 
 	/**
-	 * This is the main method, the entry point for the Java application.
-	 *
+	 * Main method – entry point of the program. Accepts user input, creates an
+	 * Intern object, and displays all details.
+	 * 
 	 * @param args Command-line arguments (not used)
 	 */
-	public static void main(String args[]) {
-		
-		//scanner class object
+	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
-		
-		//take input from user
-		System.out.println("Enter Name : ");
+		/**
+		 *  Accept input from user
+		 */
+		System.out.print("Enter Name : ");
 		String name = scanner.nextLine();
-		System.out.println("Enter Age : ");
+		System.out.print("Enter Age : ");
 		int age = scanner.nextInt();
-		scanner.nextLine();
-		System.out.println("Enter course : ");
+		scanner.nextLine(); // Consume newline
+		System.out.print("Enter Course : ");
 		String course = scanner.nextLine();
-		System.out.println("Enter unniversity : ");
+		System.out.print("Enter University : ");
 		String university = scanner.nextLine();
-		System.out.println("Enter Job title : ");
-		String jobtitle = scanner.nextLine();
-		System.out.println("Enter salary : ");
+		System.out.print("Enter Job Title : ");
+		String jobTitle = scanner.nextLine();
+		System.out.print("Enter Salary : ");
 		double salary = scanner.nextDouble();
-	
-		//create object of intern class and pass parameters for constructor
-		Intern intern = new Intern(name, age, course, university, jobtitle, salary);
-		
-		//call person class method
-		intern.showPersonDetails();
 
-		//call student class method
-		intern.showStudentDetails();
-		
-		//call employee interface method
-		intern.showEmployeeDetails();
-		
-		//get job title and salary
-		intern.getJobTitle();
-		intern.getSalary();
+		/**
+		 *  Create Intern object
+		 */
+		Intern intern = new Intern(name, age, course, university, jobTitle, salary);
+
+		/**
+		 *  Display details
+		 */
+		System.out.println("\n--- Intern Details ---");
+		intern.showPersonDetails(); // From Person
+		intern.showStudentDetails(); // From Student
+		intern.showEmployeeDetails(); // From Employee (default method)
+		intern.getJobTitle(); // From Employee (implemented)
+		intern.getSalary(); // From Employee (implemented)
+		scanner.close();
 	}
-	
 }

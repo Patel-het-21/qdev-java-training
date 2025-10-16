@@ -1,14 +1,29 @@
 package practicals.oops.inheritance.hierarchical;
 
-public class Student extends Person{
+/**
+ * Represents a student, which is a subclass of Person. Adds a roll number field
+ * specific to students. Demonstrates hierarchical inheritance.
+ * 
+ * @author Het Patel
+ * @since 14/10/25
+ */
+public class Student extends Person {
 	int rollNumber;
 
-    public void setRollNumber(int roll) {
-        this.rollNumber = roll;
-    }
+	/**
+	 * Set the roll number of student
+	 * 
+	 * @param roll
+	 */
+	public void setRollNumber(int roll) {
+		this.rollNumber = roll;
+	}
 
-    public void displayStudent() {
-        displayName();
-        System.out.println("Roll Number: " + rollNumber);
-    }
+	/**
+	 * Displays the student's name and roll number.
+	 */
+	public void displayStudent() {
+		displayName();
+		System.out.println("Roll Number: " + rollNumber);
+	}
 }

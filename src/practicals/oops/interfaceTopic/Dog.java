@@ -1,14 +1,27 @@
 package practicals.oops.interfaceTopic;
 
-// Dog class implements Animal interface
-public class Dog implements Animal{
+/**
+ * Represents a Dog which implements the {@link Animal} interface. Provides
+ * specific implementation for {@code makeSound()} and its own behavior
+ * {@code fetch()}.
+ * 
+ * @author Het Patel
+ * 
+ * @since 13/10/25
+ */
+public class Dog implements Animal {
 
-	// implementation of makeSound() for Dog
+	/**
+	 * Implementation of the makeSound method for Dog. Displays "Dog Barks".
+	 */
+	@Override
 	public void makeSound() {
 		System.out.println("Dog Barks");
 	}
-	
-    // Dog-specific method
+
+	/**
+	 * Dog-specific method to show its behavior. Displays "Dog fetches the ball".
+	 */
 	void fetch() {
 		System.out.println("Dog fetches the ball");
 	}

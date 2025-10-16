@@ -1,32 +1,56 @@
 package practicals.oops.abstraction;
 
-public class SavingsAccount extends BankAccount{
+/**
+ * Inherits from BankAccount and adds interest logic.
+ * 
+ * @author Het
+ * @since 14/10/25
+ * 
+ */
+public class SavingsAccount extends BankAccount {
 
-	private final double INTEREST_RATE = 0.04; 
-	
-	public SavingsAccount(String accountHolder,double amount) {
-		super(accountHolder,amount); 
+	/**
+	 * Constructor to initialize savings account details.
+	 * 
+	 * @param accountHolder Name of Account holder
+	 * @param amount        Initial balance
+	 */
+	public SavingsAccount(String accountHolder, double amount) {
+		super(accountHolder, amount);
 	}
-	
+
+	/**
+	 * Deposits specific amount into the Saving Account
+	 * 
+	 * @param amount Amount to deposit
+	 */
 	@Override
 	public void deposit(double amount) {
-		balance+=amount; 
+		balance += amount;
 		System.out.println("Deposited " + amount + " in Savings Account.");
 	}
 
+	/**
+	 * withdraw specific amount into the Saving Account. Fails if balance is
+	 * insufficient.
+	 * 
+	 * @param amount Amount to withdraw
+	 */
 	@Override
 	public void withdraw(double amount) {
-		if(amount>balance) {
+		if (amount > balance) {
 			System.out.println("Insufficient Balance");
-		}else {
-			balance-=amount;
+		} else {
+			balance -= amount;
 			System.out.println("Withdrawn " + amount + " from Savings Account.");
 		}
 	}
-	
-	//Method for SavingsAccount
+
+	/**
+	 * Add interest in to saving account
+	 */
 	public void addInterest() {
 		System.out.println("Inside Add interest method");
 	}
-	
+
 }
