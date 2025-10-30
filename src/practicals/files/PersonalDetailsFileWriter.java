@@ -34,10 +34,11 @@ public class PersonalDetailsFileWriter {
 			 * Prompt the user for input
 			 */
 			System.out.println("Enter your personal Details : ");
-			System.out.println("Name : ");
+			System.out.print("Name : ");
 			String name = scanner.nextLine();
 			System.out.print("Age: ");
-			String age = scanner.nextLine();
+			int age = scanner.nextInt();
+			scanner.nextLine();
 			System.out.print("Email: ");
 			String email = scanner.nextLine();
 			System.out.print("Phone Number: ");
@@ -67,7 +68,6 @@ public class PersonalDetailsFileWriter {
 		} finally {
 			scanner.close();
 		}
-
 	}
 
 }
