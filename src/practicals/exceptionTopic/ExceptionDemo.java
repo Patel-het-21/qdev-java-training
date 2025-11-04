@@ -19,9 +19,9 @@ public class ExceptionDemo {
 	 */
 	public static void age(int age) throws Exception {
 		if (age < 18) {
-			throw new Exception("\nChecked Exception: Age must be at least 18 for voating ");
+			throw new Exception("\nChecked Exception: Age must be at least 18 for voting ");
 		}
-		System.out.println("You are eligible for voating");
+		System.out.println("You are eligible for voting");
 	}
 
 	/**

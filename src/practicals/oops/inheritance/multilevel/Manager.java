@@ -10,7 +10,8 @@ package practicals.oops.inheritance.multilevel;
  * @since 14/10/25
  */
 public class Manager extends Employee {
-	String department;
+
+	private String department;
 
 	/**
 	 * Sets the manager's department.

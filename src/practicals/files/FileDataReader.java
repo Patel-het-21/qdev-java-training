@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
 
 /**
  * FileDataReader is a program to read and process text files. It demonstrates
@@ -68,7 +67,7 @@ public class FileDataReader {
 			 * Display statistics
 			 */
 			System.out.println("\n--- File Statistics ---");
-			System.out.println("Toal Lines : " + lineCount);
+			System.out.println("Total Lines : " + lineCount);
 			System.out.println("Total Words : " + wordCount);
 
 		} catch (FileNotFoundException e) {

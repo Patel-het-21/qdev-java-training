@@ -5,7 +5,6 @@ package practicals.oops.abstraction;
  * 
  * @author Het
  * @since 14/10/25
- * 
  */
 public class SavingsAccount extends BankAccount {
 

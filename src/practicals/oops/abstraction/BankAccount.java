@@ -9,6 +9,7 @@ package practicals.oops.abstraction;
  */
 
 public abstract class BankAccount {
+
 	protected String accountHolder;
 	protected double balance;
 

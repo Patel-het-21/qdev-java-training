@@ -24,4 +24,5 @@ public class Main {
 		mgr.setDepartment("Developer"); // from Manager
 		mgr.displayManager(); // shows all details
 	}
+
 }

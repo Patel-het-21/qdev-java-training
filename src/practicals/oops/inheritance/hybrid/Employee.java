@@ -25,4 +25,5 @@ public interface Employee {
 	default void showEmployeeDetails() {
 		System.out.println("Employee working on Project");
 	}
+
 }

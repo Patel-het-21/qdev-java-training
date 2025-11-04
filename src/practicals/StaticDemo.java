@@ -9,7 +9,7 @@ package practicals;
  */
 public class StaticDemo {
 
-	static int count = 0;
+	private static int count = 0;
 
 	/**
 	 * Static block executed when the class is loaded.

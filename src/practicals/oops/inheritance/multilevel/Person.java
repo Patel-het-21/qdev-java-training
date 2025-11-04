@@ -8,7 +8,8 @@ package practicals.oops.inheritance.multilevel;
  * @since 14/10/25
  */
 public class Person {
-	String name;
+
+	private String name;
 
 	/**
 	 * Sets the name of the person.
@@ -25,5 +26,5 @@ public class Person {
 	public void displayName() {
 		System.out.println("Name: " + name);
 	}
-	
+
 }

@@ -9,8 +9,8 @@ package practicals;
  */
 public class ConstructorExample {
 
-	int number1;
-	int number2;
+	private int number1;
+	private int number2;
 
 	/**
 	 * Default constructor Sets both numbers to 0

@@ -8,7 +8,8 @@ package practicals.oops.inheritance.multilevel;
  * @since 14/10/25
  */
 public class Employee extends Person {
-	int employeeId;
+
+	private int employeeId;
 
 	/**
 	 * Sets the employee ID.

@@ -14,17 +14,7 @@ import java.util.Set;
 public class RemoveDuplicatesFromList {
 
 	public static void main(String[] args) {
-		List<String> letters = new ArrayList<>();
-		letters.add("A");
-		letters.add("B");
-		letters.add("C");
-		letters.add("D");
-		letters.add("A");
-		letters.add("C");
-		letters.add("E");
-		letters.add("E");
-		letters.add("E");
-
+		List<String> letters = new ArrayList<>(List.of("A", "B", "C", "D", "A", "C", "E", "E", "E"));
 		System.out.println("Original List : " + letters);
 
 		/**

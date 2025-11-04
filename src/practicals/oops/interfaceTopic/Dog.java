@@ -25,4 +25,5 @@ public class Dog implements Animal {
 	void fetch() {
 		System.out.println("Dog fetches the ball");
 	}
+
 }

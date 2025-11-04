@@ -8,7 +8,8 @@ package practicals.oops.inheritance.hierarchical;
  * @since 14/10/25
  */
 public class Student extends Person {
-	int rollNumber;
+
+	private int rollNumber;
 
 	/**
 	 * Set the roll number of student
@@ -26,4 +27,5 @@ public class Student extends Person {
 		displayName();
 		System.out.println("Roll Number: " + rollNumber);
 	}
+
 }

@@ -9,6 +9,7 @@ package practicals;
  */
 
 class Animal {
+
 	String name = "Animal";
 
 	/**
@@ -17,9 +18,11 @@ class Animal {
 	void makeSound() {
 		System.out.println("Animal ---> Make Sound");
 	}
+
 }
 
 class Dog extends Animal {
+
 	String name = "Dog";
 
 	/**
@@ -59,6 +62,7 @@ class Dog extends Animal {
 		super.makeSound();
 		System.out.println("Dog Barks");
 	}
+
 }
 
 public class ThisSuperKeywordUsage {

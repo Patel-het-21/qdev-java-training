@@ -8,7 +8,8 @@ package practicals.oops.inheritance.hierarchical;
  * @since 14/10/25
  */
 public class Teacher extends Person {
-	String subject;
+
+	private String subject;
 
 	/**
 	 * Set the subject name
@@ -26,4 +27,5 @@ public class Teacher extends Person {
 		displayName();
 		System.out.println("Teaches: " + subject);
 	}
+
 }

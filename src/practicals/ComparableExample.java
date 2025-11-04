@@ -11,8 +11,9 @@ import java.util.List;
  * @since 17/10/25
  */
 class Student implements Comparable<Student> {
-	int rollno;
-	String name;
+
+	private int rollno;
+	private String name;
 
 	/**
 	 * Constructs a object with a specified roll number and name.

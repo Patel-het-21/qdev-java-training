@@ -11,9 +11,9 @@ import java.util.Scanner;
  */
 public class EMICalculator {
 
-	double loanAmount;
-	double annualInterestRate;
-	float loanTenureInMonths;
+	private double loanAmount;
+	private double annualInterestRate;
+	private float loanTenureInMonths;
 
 	/**
 	 * Parameterized Constructor
@@ -39,9 +39,8 @@ public class EMICalculator {
 		// Convert annual interest to monthly interest rate
 		double monthlyInterestRate = annualInterestRate / 12 / 100;
 		/**
-		 * EMI formula : EMI = [P * r * (1 + R)^N] / [(1 + R)^N - 1] 
-		 * Where : 
-		 * P = loanAmount, R = monthlyInterestRate, n = loanTenureInMonths
+		 * EMI formula : EMI = [P * r * (1 + R)^N] / [(1 + R)^N - 1] Where : P =
+		 * loanAmount, R = monthlyInterestRate, n = loanTenureInMonths
 		 */
 		return (loanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, loanTenureInMonths))
 				/ (Math.pow(1 + monthlyInterestRate, loanTenureInMonths) - 1);
@@ -65,7 +64,7 @@ public class EMICalculator {
 		System.out.print("Enter Loan TenureInMonths : ");
 		float loanTenureInMonths = scanner.nextFloat();
 		/**
-		 * Create emiCalculator object and call method to calculate EMI 
+		 * Create emiCalculator object and call method to calculate EMI
 		 */
 		EMICalculator emiCalculator = new EMICalculator(loanAmount, annualInterestRate, loanTenureInMonths);
 		double emi = emiCalculator.calculateEmi();
@@ -76,4 +75,5 @@ public class EMICalculator {
 		System.out.printf("Monthly EMI : %.2f", emi);
 		scanner.close();
 	}
+
 }

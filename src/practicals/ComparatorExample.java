@@ -12,6 +12,7 @@ import java.util.List;
  * @since 17/10/25
  */
 class Student1 {
+
 	int rollNo;
 	String name;
 
@@ -35,6 +36,7 @@ class Student1 {
 	public String toString() {
 		return "Student1 [rollNo=" + rollNo + ", name=" + name + "]";
 	}
+
 }
 
 /**
@@ -57,6 +59,7 @@ class NameComparator implements Comparator<Student1> {
 	public int compare(Student1 o1, Student1 o2) {
 		return o1.name.compareToIgnoreCase(o2.name);
 	}
+
 }
 
 /**
@@ -96,4 +99,5 @@ public class ComparatorExample {
 			System.out.println(s);
 		}
 	}
+
 }

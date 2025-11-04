@@ -9,6 +9,7 @@ package practicals.oops.inheritance.hybrid;
  * @see Intern
  */
 public class Student extends Person {
+
 	protected String course;
 	protected String university;
 
@@ -33,4 +34,5 @@ public class Student extends Person {
 		System.out.println("Course : " + course);
 		System.out.println("University : " + university);
 	}
+
 }

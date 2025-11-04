@@ -27,7 +27,7 @@ public class Main {
 		Animal dog = new Dog();
 		dog.makeSound();
 		/**
-		 *  Create Cat object with Animal reference
+		 * Create Cat object with Animal reference
 		 */
 		Animal cat = new Cat();
 		cat.makeSound();

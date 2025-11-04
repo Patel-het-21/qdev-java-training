@@ -8,7 +8,8 @@ package practicals.oops.inheritance.singlelevel;
  * @since 14/10/25
  */
 public class Person {
-	String name;
+
+	private String name;
 
 	/**
 	 * Sets the name of the person.

@@ -12,6 +12,7 @@ import java.util.Scanner;
  * @since 15/10/25
  */
 public class Intern extends Student implements Employee {
+
 	private String jobTitle;
 	private double salary;
 
@@ -56,7 +57,7 @@ public class Intern extends Student implements Employee {
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		/**
-		 *  Accept input from user
+		 * Accept input from user
 		 */
 		System.out.print("Enter Name : ");
 		String name = scanner.nextLine();
@@ -73,12 +74,12 @@ public class Intern extends Student implements Employee {
 		double salary = scanner.nextDouble();
 
 		/**
-		 *  Create Intern object
+		 * Create Intern object
 		 */
 		Intern intern = new Intern(name, age, course, university, jobTitle, salary);
 
 		/**
-		 *  Display details
+		 * Display details
 		 */
 		System.out.println("\n--- Intern Details ---");
 		intern.showPersonDetails(); // From Person
@@ -88,4 +89,5 @@ public class Intern extends Student implements Employee {
 		intern.getSalary(); // From Employee (implemented)
 		scanner.close();
 	}
+
 }

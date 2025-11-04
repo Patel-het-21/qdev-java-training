@@ -8,7 +8,8 @@ package practicals.oops.inheritance.hierarchical;
  * @since 14/10/25
  */
 public class Person {
-	String name;
+
+	private String name;
 
 	/**
 	 * Set the name of person
@@ -25,4 +26,5 @@ public class Person {
 	public void displayName() {
 		System.out.println("Name: " + name);
 	}
+
 }
