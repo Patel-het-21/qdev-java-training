@@ -1,0 +1,8 @@
+# Ignore everything inside these folders
+practicals/*
+EmployeeRegistrationSystem/*
+
+# But DO track their src folders
+!practicals/src/
+!EmployeeRegistrationSystem/src/
+
