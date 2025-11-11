@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * @author Het
  * @since 6/11/25
  */
-@WebServlet("/register")
+@WebServlet("/registeremployee")
 public class EmployeeServlet extends HttpServlet {
 
 	/** DAO instance for performing employee database operations. */
@@ -74,7 +74,7 @@ public class EmployeeServlet extends HttpServlet {
 		/**
 		 * Forward request back to index.jsp for user feedback
 		 */
-		RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("listemployee");
 		rd.forward(request, response);
 	}
 

@@ -21,7 +21,7 @@
 					<div class="alert alert-success">${successMessage}</div>
 				</c:if>
 
-				<form action="register" method="post">
+				<form action="registeremployee" method="post">
 
 					<div class="mb-3 row align-items-center">
 						<label class="col-sm-3 col-form-label">First Name</label>
@@ -75,6 +75,10 @@
 					</div>
 
 				</form>
+
+				<h5>All Employees</h5>
+				<a href="listemployee">View All Employees</a>
+
 			</div>
 		</div>
 	</div>

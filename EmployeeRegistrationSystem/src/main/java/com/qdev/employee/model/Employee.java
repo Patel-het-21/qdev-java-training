@@ -8,7 +8,8 @@ package com.qdev.employee.model;
  * @since 6/11/25
  */
 public class Employee {
-
+	
+	private int id;
 	private String firstName;
 	private String lastName;
 	private String userName;
@@ -17,7 +18,6 @@ public class Employee {
 	private String contactNo;
 
 	/**
-	 * 
 	 * @param firstName the first name of the employee
 	 * @param lastName  the last name of the employee
 	 * @param userName  the username of the employee
@@ -25,8 +25,9 @@ public class Employee {
 	 * @param address   the residential address of the employee
 	 * @param contactNo the contact number of the employee
 	 */
-	public Employee(String firstName, String lastName, String userName, String password, String address,
+	public Employee(int id,String firstName, String lastName, String userName, String password, String address,
 			String contactNo) {
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.userName = userName;
@@ -37,6 +38,24 @@ public class Employee {
 
 	public Employee() {
 		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * Returns the id of the employee.
+	 * 
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * sets the id of the employee.
+	 * 
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	/**

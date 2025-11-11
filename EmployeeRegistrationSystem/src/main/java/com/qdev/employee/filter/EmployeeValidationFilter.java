@@ -12,6 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * {@code EmployeeValidationFilter} is a servlet filter that performs input
@@ -21,7 +22,7 @@ import jakarta.servlet.annotation.WebFilter;
  * @author Het
  * @since 6/11/25
  */
-@WebFilter("/register")
+@WebFilter({ "/register", "/updateEmployee" })
 public class EmployeeValidationFilter implements Filter {
 
 	/**
@@ -81,6 +82,7 @@ public class EmployeeValidationFilter implements Filter {
 			errors.put("contactNoError", "Contact number must be exactly 10 digits.");
 		}
 
+		String uri = ((HttpServletRequest) request).getRequestURI();
 		/**
 		 * If there are validation errors, forward request back to index.jsp
 		 */
@@ -99,8 +101,12 @@ public class EmployeeValidationFilter implements Filter {
 			/**
 			 * Forward back to the registration form
 			 */
-			RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");
-			requestDispatcher.forward(request, response);
+
+			if (uri.contains("updateEmployee")) {
+				request.getRequestDispatcher("editEmployee.jsp").forward(request, response);
+			} else {
+				request.getRequestDispatcher("index.jsp").forward(request, response);
+			}
 			/**
 			 * Stop further filter/servlet processing
 			 */
