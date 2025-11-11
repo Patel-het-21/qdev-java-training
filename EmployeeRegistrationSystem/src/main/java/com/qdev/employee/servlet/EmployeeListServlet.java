@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.qdev.employee.servlet;
 
 import java.io.IOException;
@@ -17,6 +14,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
+ * Servlet implementation class EmployeeListServlet.
+ * 
  * @author Het
  * @since 10/11/25
  */
@@ -26,16 +25,45 @@ public class EmployeeListServlet extends HttpServlet {
 	/** DAO instance for performing employee database operations. */
 	private EmployeeDao employeeDao = new EmployeeDao();
 
+	/**
+	 * Handles the HTTP POST method by delegating to
+	 * {@link #doGet(HttpServletRequest, HttpServletResponse)}.
+	 * 
+	 * @param request  the HttpServletRequest object containing client request data
+	 * @param response the HttpServletResponse object for sending a response
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException      if an I/O error occurs during processing
+	 */
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
 
+	/**
+	 * Handles the HTTP GET method to fetch all employees and forward to the JSP
+	 * page.
+	 * 
+	 * @param request  the HttpServletRequest object containing client request data
+	 * @param response the HttpServletResponse object for sending a response
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException      if an I/O error occurs during processing
+	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		/**
+		 * Retrieve all employees from the database
+		 */
 		List<Employee> employeeList = employeeDao.getAllEmployees();
+		/**
+		 * Set the employee list as a request attribute
+		 */
 		request.setAttribute("employeeList", employeeList);
+		/**
+		 * Forward the request to the JSP page for rendering
+		 */
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("listEmployee.jsp");
 		requestDispatcher.forward(request, response);
 	}

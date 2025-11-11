@@ -12,15 +12,35 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/**
+ * Servlet implementation class EmployeeUpdateServlet.
+ * 
+ * @author Het
+ * @since 11/11/25
+ */
 @WebServlet("/updateEmployee")
 public class EmployeeUpdateServlet extends HttpServlet {
 
+	private static final long serialVersionUID = 1L;
+
+	/** DAO instance for performing employee database operations. */
 	private EmployeeDao employeeDao = new EmployeeDao();
 
+	/**
+	 * Handles the HTTP POST method to update an employee's information.
+	 * 
+	 * @param request  the HttpServletRequest object containing client request data
+	 * @param response the HttpServletResponse object for sending a response
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException      if an I/O error occurs during processing
+	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		/**
+		 * Parse request parameters
+		 */
 		int id = Integer.parseInt(request.getParameter("id"));
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
@@ -29,6 +49,9 @@ public class EmployeeUpdateServlet extends HttpServlet {
 		String address = request.getParameter("address");
 		String contactNo = request.getParameter("contactNo");
 
+		/**
+		 * Create and populate Employee object
+		 */
 		Employee employee = new Employee();
 		employee.setId(id);
 		employee.setFirstName(firstName);
@@ -38,17 +61,23 @@ public class EmployeeUpdateServlet extends HttpServlet {
 		employee.setAddress(address);
 		employee.setContactNo(contactNo);
 
+		/**
+		 * Update employee in the database
+		 */
 		int result = employeeDao.updateEmployee(employee);
-
+		/**
+		 * Set request attributes based on result
+		 */
 		if (result > 0) {
 			request.setAttribute("successMessage", "Employee updated successfully!");
 		} else {
 			request.setAttribute("errorMessage", "Failed to update employee!");
 		}
-
-		System.out.println("Data successfully inserted or updated");
-		// Redirect back to employee list
+		/**
+		 * Forward back to the employee list page
+		 */
 		RequestDispatcher rd = request.getRequestDispatcher("/listemployee");
 		rd.forward(request, response);
 	}
+
 }
