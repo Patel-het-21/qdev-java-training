@@ -26,21 +26,6 @@ public class EmployeeListServlet extends HttpServlet {
 	private EmployeeDao employeeDao = new EmployeeDao();
 
 	/**
-	 * Handles the HTTP POST method by delegating to
-	 * {@link #doGet(HttpServletRequest, HttpServletResponse)}.
-	 * 
-	 * @param request  the HttpServletRequest object containing client request data
-	 * @param response the HttpServletResponse object for sending a response
-	 * @throws ServletException if a servlet-specific error occurs
-	 * @throws IOException      if an I/O error occurs during processing
-	 */
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
-	}
-
-	/**
 	 * Handles the HTTP GET method to fetch all employees and forward to the JSP
 	 * page.
 	 * 

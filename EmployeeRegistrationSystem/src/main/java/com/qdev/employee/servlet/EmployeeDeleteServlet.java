@@ -25,7 +25,6 @@ public class EmployeeDeleteServlet extends HttpServlet {
 	 * Data Access Object for performing database operations related to Employee.
 	 */
 	private EmployeeDao employeeDao = new EmployeeDao();
-
 	/**
 	 * Handles the HTTP GET method for deleting an employee.
 	 *
@@ -42,7 +41,6 @@ public class EmployeeDeleteServlet extends HttpServlet {
 		 * Retrieve the "id" parameter from the request
 		 */
 		String idParam = request.getParameter("id");
-
 		if (idParam != null) {
 			try {
 				/**

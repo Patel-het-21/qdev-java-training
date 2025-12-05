@@ -39,7 +39,6 @@ public class EmployeeServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		/**
 		 * Retrieve validated form parameters
 		 */
@@ -49,7 +48,6 @@ public class EmployeeServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		String address = request.getParameter("address");
 		String contactNo = request.getParameter("contactNo");
-
 		/**
 		 * Create an Employee object using the form data
 		 */
@@ -69,13 +67,14 @@ public class EmployeeServlet extends HttpServlet {
 		 * If the record was inserted successfully, show success message
 		 */
 		if (rowInserted == 1) {
-			request.setAttribute("successMessage", "Employee registered successfully!");
+			request.getSession().setAttribute("successMessage", "Employee registered successfully!");
 		}
 		/**
 		 * Forward request back to index.jsp for user feedback
 		 */
-		RequestDispatcher rd = request.getRequestDispatcher("listemployee");
-		rd.forward(request, response);
+		// RequestDispatcher rd = request.getRequestDispatcher("listemployee");
+		// rd.forward(request, response);
+		response.sendRedirect("listemployee");
 	}
 
 }

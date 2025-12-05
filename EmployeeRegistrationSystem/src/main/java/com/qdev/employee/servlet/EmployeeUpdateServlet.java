@@ -21,8 +21,6 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/updateEmployee")
 public class EmployeeUpdateServlet extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
-
 	/** DAO instance for performing employee database operations. */
 	private EmployeeDao employeeDao = new EmployeeDao();
 
@@ -37,7 +35,6 @@ public class EmployeeUpdateServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		/**
 		 * Parse request parameters
 		 */
@@ -48,7 +45,6 @@ public class EmployeeUpdateServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		String address = request.getParameter("address");
 		String contactNo = request.getParameter("contactNo");
-
 		/**
 		 * Create and populate Employee object
 		 */
@@ -69,15 +65,16 @@ public class EmployeeUpdateServlet extends HttpServlet {
 		 * Set request attributes based on result
 		 */
 		if (result > 0) {
-			request.setAttribute("successMessage", "Employee updated successfully!");
+			request.getSession().setAttribute("successMessage", "Employee updated successfully!");
 		} else {
-			request.setAttribute("errorMessage", "Failed to update employee!");
+			request.getSession().setAttribute("errorMessage", "Failed to update employee!");
 		}
 		/**
 		 * Forward back to the employee list page
 		 */
-		RequestDispatcher rd = request.getRequestDispatcher("/listemployee");
-		rd.forward(request, response);
+		//RequestDispatcher rd = request.getRequestDispatcher("/listemployee");
+		//rd.forward(request, response);
+		response.sendRedirect("listemployee");
 	}
 
 }

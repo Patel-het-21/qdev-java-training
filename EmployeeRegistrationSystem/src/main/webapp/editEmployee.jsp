@@ -20,8 +20,7 @@
 		</c:if>
 
 		<form action="updateEmployee" method="post" class="card p-4 shadow-sm">
-			<input type="hidden" name="id" value="${employee.id}">
-
+			<input type="hidden" name="id" value="${not empty id ? id :employee.id}">
 			<!-- First Name -->
 			<div class="mb-3">
 				<label class="form-label">First Name</label> <input type="text"

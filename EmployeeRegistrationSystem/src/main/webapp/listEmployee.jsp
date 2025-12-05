@@ -11,22 +11,49 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
 	rel="stylesheet">
 </head>
+<style>
+.floating-alert {
+	position: fixed;
+	top: 8%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 9999;
+	max-width: 80%;
+	padding: 15px 25px;
+	text-align: center;
+	opacity: 1;
+	transition: opacity 0.8s ease;
+	border-radius: 8px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+	font-size: 18px;
+}
+
+td span {
+	display: inline-block;
+	max-width: 150px; /* adjust width as needed */
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	vertical-align: bottom;
+}
+</style>
+
 <body>
 	<div class="container mt-5">
 		<h2>Employee List</h2>
 
 		<!-- Success Message -->
 		<c:if test="${not empty successMessage}">
-			<div class="alert alert-success text-center" id="successMessage">
-				${successMessage}</div>
-			<c:remove var="successMessage" scope="request" />
+			<div class="alert alert-success floating-alert" id="successMessage">
+				${sessionScope.successMessage}</div>
+			<c:remove var="successMessage" scope="session" />
 		</c:if>
 
 		<!-- Error Message -->
 		<c:if test="${not empty errorMessage}">
-			<div class="alert alert-danger text-center" id="errorMessage">
-				${errorMessage}</div>
-			<c:remove var="errorMessage" scope="request" />
+			<div class="alert alert-danger floating-alert" id="errorMessage">
+				${sessionScope.errorMessage}</div>
+			<c:remove var="errorMessage" scope="session" />
 		</c:if>
 
 		<c:choose>
@@ -45,11 +72,17 @@
 					<tbody>
 						<c:forEach var="emp" items="${employeeList}">
 							<tr>
-								<td>${emp.firstName}</td>
-								<td>${emp.lastName}</td>
-								<td>${emp.userName}</td>
-								<td>${emp.address}</td>
-								<td>${emp.contactNo}</td>
+								<td><span data-bs-toggle="tooltip" title="${emp.firstName}">
+										${emp.firstName} </span></td>
+								<td><span data-bs-toggle="tooltip" title="${emp.lastName}">
+										${emp.lastName} </span></td>
+								<td><span data-bs-toggle="tooltip" title="${emp.userName}">
+										${emp.userName} </span></td>
+								<td><span data-bs-toggle="tooltip" title="${emp.address}">
+										${emp.address} </span></td>
+								<td><span data-bs-toggle="tooltip" title="${emp.contactNo}">
+										${emp.contactNo} </span></td>
+
 								<td><a href="viewemployee?id=${emp.id}">View</a> | <a
 									href="editemployee?id=${emp.id}">Edit</a> | <a
 									href="deleteemployee?id=${emp.id}"
@@ -70,6 +103,18 @@
 		<a href="index.jsp" class="btn btn-primary mt-3">Back to
 			Registration</a>
 	</div>
+
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+	<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
 
 	<!-- JavaScript to auto-hide messages after 3 seconds -->
 	<script>
