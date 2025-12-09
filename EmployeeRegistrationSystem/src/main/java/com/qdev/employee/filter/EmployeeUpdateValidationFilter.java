@@ -11,7 +11,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * {@code EmployeeUpdateValidationFilter} is a servlet filter that performs
@@ -27,14 +26,10 @@ public class EmployeeUpdateValidationFilter implements Filter {
 	/**
 	 * Intercepts incoming update requests and validates input fields.
 	 *
-	 * @param request  the {@link ServletRequest} object containing client-submitted
-	 *                 data
-	 * @param response the {@link ServletResponse} object for sending data back to
-	 *                 the client
-	 * @param chain    the {@link FilterChain} used to invoke the next filter or
-	 *                 servlet in the processing chain
-	 * @throws IOException      if an input or output error occurs during the
-	 *                          filtering process
+	 * @param request           the {@link ServletRequest} object containing client-submitted data
+	 * @param response          the {@link ServletResponse} object for sending data back to the client
+	 * @param chain             the {@link FilterChain} used to invoke the next filter or servlet in the processing chain
+	 * @throws IOException      if an input or output error occurs during the filtering process
 	 * @throws ServletException if the request cannot be handled
 	 */
 	@Override

@@ -5,7 +5,6 @@ import java.io.IOException;
 import com.qdev.employee.dao.EmployeeDao;
 import com.qdev.employee.model.Employee;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -39,12 +38,12 @@ public class EmployeeUpdateServlet extends HttpServlet {
 		 * Parse request parameters
 		 */
 		int id = Integer.parseInt(request.getParameter("id"));
-		String firstName = request.getParameter("firstName");
-		String lastName = request.getParameter("lastName");
-		String userName = request.getParameter("userName");
-		String password = request.getParameter("password");
-		String address = request.getParameter("address");
-		String contactNo = request.getParameter("contactNo");
+		String firstName = request.getParameter("firstName").trim();
+		String lastName = request.getParameter("lastName").trim();
+		String userName = request.getParameter("userName").trim();
+		String password = request.getParameter("password").trim();
+		String address = request.getParameter("address").trim();
+		String contactNo = request.getParameter("contactNo").trim();
 		/**
 		 * Create and populate Employee object
 		 */

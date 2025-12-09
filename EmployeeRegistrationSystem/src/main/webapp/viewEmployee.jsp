@@ -20,9 +20,7 @@
 
 		<c:if test="${not empty employee}">
 			<div class="card shadow-sm p-4">
-				<h4 class="mb-3 text-primary">${employee.firstName}
-					${employee.lastName}</h4>
-
+				<h4 class="mb-3 text-primary">${employee.firstName} ${employee.lastName}</h4>
 				<p>
 					<strong>Username:</strong> ${employee.userName}
 				</p>
@@ -36,8 +34,7 @@
 		</c:if>
 
 		<div class="text-center mt-4">
-			<a href="listemployee" class="btn btn-secondary">Back to Employee
-				List</a>
+			<a href="listemployee" class="btn btn-secondary">Back to Employee List</a>
 		</div>
 	</div>
 </body>
