@@ -8,10 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	const addressInput = document.getElementById("addressInput");
 	const contactNoInput = document.getElementById("contactNoInput");
 	const submitBtn = document.getElementById("submitBtn");
-
 	/* empIdHidden and isEditMode come from JSP */
 	const isEdit = isEditMode;
-
 	/* ORIGINAL VALUES (For Update Mode) */
 	const originalValues = {
 		firstName: firstNameInput.value,
@@ -21,7 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		address: addressInput.value,
 		contactNo: contactNoInput.value
 	};
-
 	/* VALIDATION FLAGS */
 	let validation = {
 		firstName: false,
@@ -43,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			icon.classList.replace("bi-eye-slash", "bi-eye");
 		}
 	}
-
 	/* SET / CLEAR ERROR */
 	function setError(input, spanId, msg) {
 		input.classList.add("input-error");
@@ -51,14 +47,12 @@ document.addEventListener("DOMContentLoaded", () => {
 		validation[input.name] = false;
 		updateButtons();
 	}
-
 	function clearError(input, spanId) {
 		input.classList.remove("input-error");
 		document.getElementById(spanId).innerText = "";
 		validation[input.name] = true;
 		updateButtons();
 	}
-
 	/* BUTTON ENABLE LOGIC */
 	function updateButtons() {
 		if (!isEdit) {
@@ -71,12 +65,9 @@ document.addEventListener("DOMContentLoaded", () => {
 		// 1) At least one field changed from original AND its validation is true
 		// 2) AND all changed fields are valid
 		let changedValid = false;
-
 		const fields = ["firstName", "lastName", "userName", "address", "contactNo"];
-
 		for (let key of fields) {
 			const input = document.getElementById(key + "Input");
-
 			// Field changed and valid
 			if (input.value !== originalValues[key]) {
 				if (!validation[key]) {
@@ -87,7 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				changedValid = true; // At least one changed and valid
 			}
 		}
-
 		// Password field special case (optional in update)
 		if (passwordInput.value.trim() !== "" && !validation.password) {
 			submitBtn.disabled = true;
@@ -96,11 +86,9 @@ document.addEventListener("DOMContentLoaded", () => {
 		if (passwordInput.value.trim() !== "" && validation.password) {
 			changedValid = true; // password changed and valid
 		}
-
 		// Enable button only if at least one change is valid and all changed fields are valid
 		submitBtn.disabled = !changedValid;
 	}
-
 
 	/* AJAX FUNCTIONS */
 	async function checkUsernameExists(userName, empIdHidden) {
@@ -113,7 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			return false;
 		}
 	}
-
 	async function checkContactExists(contact, empIdHidden) {
 		try {
 			const res = await fetch("CheckUserServlet?contactNo=" + encodeURIComponent(contact) + "&id=" + empIdHidden);
@@ -127,59 +114,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	/* VALIDATIONS */
 	function validateName(input, spanId) {
-		const value = input.value.trim();
-
-		if (!value) return setError(input, spanId, "Required");
-		if (!/^[A-Za-z ]+$/.test(value)) return setError(input, spanId, "Only alphabets allowed");
-		if (value.length < 2) return setError(input, spanId, "Min 2 characters");
-
-		if (value.length > 50) {
-			input.value = value.slice(0, 50);
+		const val = input.value.trim();
+		if (val.length === 0) {
+			return setError(input, spanId, "Cannot be empty");
+		}
+		if (val.length < 2) {
+			return setError(input, spanId, "Min 2 characters");
+		}
+		if (val.length > 50) {
+			input.value = val.slice(0, 50);
 			return setError(input, spanId, "Max 50 characters");
 		}
-
+		const regex = /^[A-Za-z\s]+$/;
+		if (!regex.test(val)) {
+			return setError(input, spanId, "Only letters and spaces allowed");
+		}
 		clearError(input, spanId);
 	}
 
 	/* USERNAME */
 	userNameInput.addEventListener("input", async () => {
 		const val = userNameInput.value.trim();
-
 		if (val.length < 4) return setError(userNameInput, "userNameAjaxError", "Min 4 characters");
-
 		if (val.length > 30) {
 			userNameInput.value = val.slice(0, 30);
 			return setError(userNameInput, "userNameAjaxError", "Max 30 characters");
 		}
-
 		const exists = await checkUsernameExists(val, empIdHidden);
 		if (exists) return setError(userNameInput, "userNameAjaxError", "Username already exists");
-
 		clearError(userNameInput, "userNameAjaxError");
 	});
 
 	/* PASSWORD */
 	passwordInput.addEventListener("input", () => {
 		const val = passwordInput.value.trim();
-
 		if (isEdit && val.length === 0) {
 			validation.password = true;
 			return clearError(passwordInput, "passwordAjaxError");
 		}
-
 		const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,30}$/;
-
 		if (val.length < 8)
 			return setError(passwordInput, "passwordAjaxError", "Min 8 characters");
-
 		if (val.length > 30) {
 			passwordInput.value = val.slice(0, 30);
 			return setError(passwordInput, "passwordAjaxError", "Max 30 characters");
 		}
-
 		if (!regex.test(val))
 			return setError(passwordInput, "passwordAjaxError", "Include upper, lower, digit, special char");
-
 		clearError(passwordInput, "passwordAjaxError");
 	});
 
@@ -187,37 +168,30 @@ document.addEventListener("DOMContentLoaded", () => {
 	contactNoInput.addEventListener("input", async () => {
 		contactNoInput.value = contactNoInput.value.replace(/\D/g, "");
 		const val = contactNoInput.value;
-
 		if (val.length !== 10)
 			return setError(contactNoInput, "contactNoAjaxError", "Must be 10 digits");
-
 		const exists = await checkContactExists(val, empIdHidden);
 		if (exists)
 			return setError(contactNoInput, "contactNoAjaxError", "Contact already exists");
-
 		clearError(contactNoInput, "contactNoAjaxError");
 	});
 
 	/* ADDRESS */
 	addressInput.addEventListener("input", () => {
 		const val = addressInput.value;
-
 		if (val.length > 200) {
 			addressInput.value = val.slice(0, 200); // optional: keep max 200 chars
 			setError(addressInput, "addressErrorSpan", "Max 200 characters");
 		} else {
 			clearError(addressInput, "addressErrorSpan");
 		}
-
 		validation.address = val.length <= 200; // valid only if <= 200
 		updateButtons();
 	});
 
-
 	/* FIRST & LAST NAME */
 	firstNameInput.addEventListener("input", () => validateName(firstNameInput, "firstNameAjaxError"));
 	lastNameInput.addEventListener("input", () => validateName(lastNameInput, "lastNameAjaxError"));
-
 	/* BLUR VALIDATION */
 	function addBlurRequired(input, spanId, field) {
 		input.addEventListener("blur", () => {
@@ -225,27 +199,22 @@ document.addEventListener("DOMContentLoaded", () => {
 				setError(input, spanId, "Please enter " + field);
 		});
 	}
-
 	addBlurRequired(firstNameInput, "firstNameAjaxError", "First Name");
 	addBlurRequired(lastNameInput, "lastNameAjaxError", "Last Name");
 	addBlurRequired(userNameInput, "userNameAjaxError", "Username");
 	addBlurRequired(passwordInput, "passwordAjaxError", "Password");
 	addBlurRequired(contactNoInput, "contactNoAjaxError", "Contact No");
-
 	/* PREVENT SUBMIT IF INVALID */
 	document.getElementById("employeeRegister").addEventListener("submit", function(e) {
 		if (submitBtn.disabled) e.preventDefault();
 	});
-
 });
 
 /* CLEAR BUTTON */
 function clearForm() {
 	document.getElementById("employeeRegister").reset();
-
 	document.querySelectorAll(".input-error").forEach(i => i.classList.remove("input-error"));
 	document.querySelectorAll(".error-span").forEach(s => s.innerText = "");
-
 	validation = {
 		firstName: false,
 		lastName: false,
@@ -254,6 +223,5 @@ function clearForm() {
 		address: true,
 		contactNo: false
 	};
-
 	submitBtn.disabled = true;
 }

@@ -23,7 +23,6 @@ import jakarta.servlet.http.HttpServletResponse;
 public class EmployeeEditServlet extends HttpServlet {
 
 	private EmployeeDao employeeDao = new EmployeeDao();
-
 	/**
 	 * Handles the GET request to load the employee data and forward it to the edit
 	 * form.
@@ -55,7 +54,6 @@ public class EmployeeEditServlet extends HttpServlet {
 			 *  Fetch employee data
 			 */
 			Employee employee = employeeDao.getEmployeeId(id);
-
 			if (employee != null) {
 				request.setAttribute("employee", employee);
 				request.setAttribute("isEdit", true); // Flag for JSP to switch to edit mode
@@ -66,7 +64,6 @@ public class EmployeeEditServlet extends HttpServlet {
 				request.getSession().setAttribute("errorMessage", "Employee not found!");
 				response.sendRedirect("listemployee");
 			}
-
 		} catch (NumberFormatException e) {
 			request.getSession().setAttribute("errorMessage", "Invalid Employee ID!");
 			response.sendRedirect("listemployee");

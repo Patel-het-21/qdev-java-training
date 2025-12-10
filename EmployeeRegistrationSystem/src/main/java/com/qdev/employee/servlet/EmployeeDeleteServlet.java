@@ -36,7 +36,6 @@ public class EmployeeDeleteServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		/*
 		 * Retrieve the "id" parameter from the request
 		 */
@@ -47,12 +46,10 @@ public class EmployeeDeleteServlet extends HttpServlet {
 				 * Parse the ID to an integer
 				 */
 				int id = Integer.parseInt(idParam);
-
 				/**
 				 * Delete the employee with the specified ID
 				 */
 				employeeDao.deleteEmployee(id);
-
 			} catch (NumberFormatException e) {
 				/**
 				 * Handle invalid ID format

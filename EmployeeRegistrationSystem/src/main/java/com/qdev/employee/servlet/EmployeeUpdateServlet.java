@@ -71,8 +71,6 @@ public class EmployeeUpdateServlet extends HttpServlet {
 		/**
 		 * Forward back to the employee list page
 		 */
-		//RequestDispatcher rd = request.getRequestDispatcher("/listemployee");
-		//rd.forward(request, response);
 		response.sendRedirect("listemployee");
 	}
 

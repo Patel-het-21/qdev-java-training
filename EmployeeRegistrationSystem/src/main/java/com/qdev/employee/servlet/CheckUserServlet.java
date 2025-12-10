@@ -75,7 +75,6 @@ public class CheckUserServlet extends HttpServlet {
 		 * Build JSON response
 		 */
 		String json = "{\"userNameExists\":" + userNameExist + ",\"contactNoExists\":" + contactNoExist + "}";
-
 		response.setContentType("application/json");
 		response.getWriter().write(json);
 	}

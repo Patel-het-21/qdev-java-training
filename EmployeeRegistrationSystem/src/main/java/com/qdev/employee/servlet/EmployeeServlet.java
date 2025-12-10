@@ -71,8 +71,6 @@ public class EmployeeServlet extends HttpServlet {
 		/**
 		 * Forward request back to index.jsp for user feedback
 		 */
-		// RequestDispatcher rd = request.getRequestDispatcher("listemployee");
-		// rd.forward(request, response);
 		response.sendRedirect("listemployee");
 	}
 
