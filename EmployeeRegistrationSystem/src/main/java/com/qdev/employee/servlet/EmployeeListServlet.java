@@ -1,6 +1,7 @@
 package com.qdev.employee.servlet;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import com.qdev.employee.dao.EmployeeDao;
@@ -24,7 +25,6 @@ public class EmployeeListServlet extends HttpServlet {
 
 	/** DAO instance for performing employee database operations. */
 	private EmployeeDao employeeDao = new EmployeeDao();
-
 	/**
 	 * Handles the HTTP GET method to fetch all employees and forward to the JSP
 	 * page.
@@ -35,9 +35,7 @@ public class EmployeeListServlet extends HttpServlet {
 	 * @throws IOException      if an I/O error occurs during processing
 	 */
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		/**
 		 * Retrieve all employees from the database
 		 */
@@ -45,6 +43,7 @@ public class EmployeeListServlet extends HttpServlet {
 		/**
 		 * Set the employee list as a request attribute
 		 */
+		Collections.reverse(employeeList);
 		request.setAttribute("employeeList", employeeList);
 		/**
 		 * Forward the request to the JSP page for rendering

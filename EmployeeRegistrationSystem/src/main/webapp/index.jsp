@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" isELIgnored="false"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
@@ -16,7 +15,6 @@
 		box-shadow: 0 0 5px rgba(255, 0, 0, 0.4) !important;
 	}
 	</style>
-
 </head>
 <body>
 	<div class="container mt-5">
@@ -100,13 +98,11 @@
 						</c:if>
 					</div>
 				</form>
-
 				<h5>All Employees</h5>
 				<a href="listemployee">View All Employees</a>
 			</div>
 		</div>
 	</div>
-
 	<script>
 		const empIdHidden = "${isEdit ? employee.id : ''}";
 		const isEditMode = ${isEdit ? 'true' : 'false'};

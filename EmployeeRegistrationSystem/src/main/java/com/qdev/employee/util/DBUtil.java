@@ -15,6 +15,7 @@ import java.sql.SQLException;
  * @since 10/11/25
  */
 public class DBUtil {
+
 	/**
 	 * JDBC URL to connect to the MySQL employee database.
 	 */
@@ -27,7 +28,6 @@ public class DBUtil {
 	 * Password used to connect to the database.
 	 */
 	private static final String JDBC_PASSWORD = "root";
-
 	static {
 		try {
 			/**
@@ -48,4 +48,5 @@ public class DBUtil {
 	public static Connection getConnection() throws SQLException {
 		return DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
 	}
+
 }

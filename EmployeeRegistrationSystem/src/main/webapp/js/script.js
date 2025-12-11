@@ -1,5 +1,17 @@
-document.addEventListener("DOMContentLoaded", () => {
+/* TOGGLE PASSWORD */
+function togglePassword() {
+	const passwordInput = document.getElementById("password");
+	const icon = document.getElementById("toggleIcon");
+	if (passwordInput.type === "password") {
+		passwordInput.type = "text";
+		icon.classList.replace("bi-eye", "bi-eye-slash");
+	} else {
+		passwordInput.type = "password";
+		icon.classList.replace("bi-eye-slash", "bi-eye");
+	}
+}
 
+document.addEventListener("DOMContentLoaded", () => {
 	/* GET ELEMENTS */
 	const firstNameInput = document.getElementById("firstNameInput");
 	const lastNameInput = document.getElementById("lastNameInput");
@@ -28,18 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		address: true,
 		contactNo: false
 	};
-
-	/* TOGGLE PASSWORD */
-	function togglePassword() {
-		const icon = document.getElementById("toggleIcon");
-		if (passwordInput.type === "password") {
-			passwordInput.type = "text";
-			icon.classList.replace("bi-eye", "bi-eye-slash");
-		} else {
-			passwordInput.type = "password";
-			icon.classList.replace("bi-eye-slash", "bi-eye");
-		}
-	}
 	/* SET / CLEAR ERROR */
 	function setError(input, spanId, msg) {
 		input.classList.add("input-error");
@@ -60,7 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			submitBtn.disabled = !Object.values(validation).every(v => v);
 			return;
 		}
-
 		// UPDATE MODE: button enabled only if:
 		// 1) At least one field changed from original AND its validation is true
 		// 2) AND all changed fields are valid
@@ -89,7 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		// Enable button only if at least one change is valid and all changed fields are valid
 		submitBtn.disabled = !changedValid;
 	}
-
 	/* AJAX FUNCTIONS */
 	async function checkUsernameExists(userName, empIdHidden) {
 		try {
@@ -111,12 +109,11 @@ document.addEventListener("DOMContentLoaded", () => {
 			return false;
 		}
 	}
-
 	/* VALIDATIONS */
 	function validateName(input, spanId) {
 		const val = input.value.trim();
 		if (val.length === 0) {
-			return setError(input, spanId, "Cannot be empty");
+			return setError(input, spanId, "Required");
 		}
 		if (val.length < 2) {
 			return setError(input, spanId, "Min 2 characters");
@@ -131,22 +128,42 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 		clearError(input, spanId);
 	}
-
-	/* USERNAME */
+	const blockedUsernames = ["admin", "root", "system", "support", "manager"];
 	userNameInput.addEventListener("input", async () => {
-		const val = userNameInput.value.trim();
-		if (val.length < 4) return setError(userNameInput, "userNameAjaxError", "Min 4 characters");
+		let val = userNameInput.value.trim();
+		userNameInput.value = val; // prevent spaces
+		const lowerVal = val.toLowerCase();
+		// Block restricted usernames
+		if (blockedUsernames.includes(lowerVal)) {
+			return setError(userNameInput, "userNameAjaxError", "This username is not allowed");
+		}
+		// Minimum length
+		if (val.length < 4)
+			return setError(userNameInput, "userNameAjaxError", "Min 4 characters");
+		// Maximum length
 		if (val.length > 30) {
 			userNameInput.value = val.slice(0, 30);
 			return setError(userNameInput, "userNameAjaxError", "Max 30 characters");
 		}
+		// NEW RULE: Must start with a letter
+		if (!/^[A-Za-z]/.test(val)) {
+			return setError(userNameInput, "userNameAjaxError", "Username must start with a letter");
+		}
+		// NEW RULE: Allowed characters (letters, digits, underscore)
+		const allowedRegex = /^[A-Za-z0-9_]+$/;
+		if (!allowedRegex.test(val)) {
+			return setError(userNameInput, "userNameAjaxError", "Only letters, digits, and underscore (_) allowed");
+		}
+		// Check uniqueness (AJAX)
 		const exists = await checkUsernameExists(val, empIdHidden);
-		if (exists) return setError(userNameInput, "userNameAjaxError", "Username already exists");
+		if (exists)
+			return setError(userNameInput, "userNameAjaxError", "Username already exists");
+
 		clearError(userNameInput, "userNameAjaxError");
 	});
-
 	/* PASSWORD */
 	passwordInput.addEventListener("input", () => {
+		passwordInput.value = passwordInput.value.replace(/\s+/g, "");
 		const val = passwordInput.value.trim();
 		if (isEdit && val.length === 0) {
 			validation.password = true;
@@ -159,11 +176,17 @@ document.addEventListener("DOMContentLoaded", () => {
 			passwordInput.value = val.slice(0, 30);
 			return setError(passwordInput, "passwordAjaxError", "Max 30 characters");
 		}
+		if (/\s/.test(val))
+			return setError(passwordInput, "passwordAjaxError", "Spaces are not allowed");
 		if (!regex.test(val))
 			return setError(passwordInput, "passwordAjaxError", "Include upper, lower, digit, special char");
 		clearError(passwordInput, "passwordAjaxError");
 	});
-
+	passwordInput.addEventListener("keydown", (e) => {
+		if (e.key === " ") {
+			e.preventDefault();  // Block space key
+		}
+	});
 	/* CONTACT NO */
 	contactNoInput.addEventListener("input", async () => {
 		contactNoInput.value = contactNoInput.value.replace(/\D/g, "");
@@ -175,7 +198,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			return setError(contactNoInput, "contactNoAjaxError", "Contact already exists");
 		clearError(contactNoInput, "contactNoAjaxError");
 	});
-
 	/* ADDRESS */
 	addressInput.addEventListener("input", () => {
 		const val = addressInput.value;

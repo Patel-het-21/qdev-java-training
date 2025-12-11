@@ -32,10 +32,7 @@ public class EmployeeDao {
 	public int saveEmployee(Employee employee) {
 		int rowInserted = 0;
 		String insertEmployee = "INSERT INTO employee (firstName, lastName, userName, password, address, contactNo) VALUES (?, ?, ?, ?, ?, ?)";
-
-		try (Connection connection = DBUtil.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(insertEmployee)) {
-
+		try (Connection connection = DBUtil.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(insertEmployee)) {
 			preparedStatement.setString(1, employee.getFirstName());
 			preparedStatement.setString(2, employee.getLastName());
 			preparedStatement.setString(3, employee.getUserName());
@@ -57,10 +54,7 @@ public class EmployeeDao {
 	 */
 	public int updateEmployee(Employee employee) {
 		String updateEmployee = "UPDATE employee SET firstName = ?, lastName = ?, userName = ?, password = ?, address = ?, contactNo = ? WHERE id = ?";
-
-		try (Connection connection = DBUtil.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(updateEmployee)) {
-
+		try (Connection connection = DBUtil.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(updateEmployee)) {
 			preparedStatement.setString(1, employee.getFirstName());
 			preparedStatement.setString(2, employee.getLastName());
 			preparedStatement.setString(3, employee.getUserName());
@@ -83,7 +77,6 @@ public class EmployeeDao {
 	 */
 	public int deleteEmployee(int id) {
 		String deleteEmployee = "DELETE FROM employee WHERE id = ?";
-
 		try (Connection connection = DBUtil.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(deleteEmployee)) {
 			preparedStatement.setInt(1, id);
@@ -102,10 +95,7 @@ public class EmployeeDao {
 	public List<Employee> getAllEmployees() {
 		List<Employee> employees = new ArrayList<>();
 		String query = "SELECT * FROM employee";
-
-		try (Connection connection = DBUtil.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(query);
-				ResultSet resultSet = preparedStatement.executeQuery()) {
+		try (Connection connection = DBUtil.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query); ResultSet resultSet = preparedStatement.executeQuery()) {
 			while (resultSet.next()) {
 				Employee employee = new Employee();
 				employee.setId(resultSet.getInt("id"));
@@ -129,7 +119,7 @@ public class EmployeeDao {
 	 * @param id the unique employee ID
 	 * @return an {@link Employee} object if found, otherwise null
 	 */
-	public Employee getEmployeeId(int id) {
+	public Employee getEmployeeById(int id) {
 		Employee employee = null;
 		String query = "SELECT * FROM employee WHERE id = ?";
 
@@ -243,4 +233,5 @@ public class EmployeeDao {
 		}
 		return false;
 	}
+
 }

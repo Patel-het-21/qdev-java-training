@@ -36,10 +36,8 @@ public class EmployeeEditServlet extends HttpServlet {
 	 * @throws IOException      if an input/output error occurs
 	 */
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String idParam = request.getParameter("id");
-
 		/*
 		 *  Validate ID parameter
 		 */
@@ -49,11 +47,10 @@ public class EmployeeEditServlet extends HttpServlet {
 			return;
 		}
 		try {
-			int id = Integer.parseInt(idParam);
 			/*
 			 *  Fetch employee data
 			 */
-			Employee employee = employeeDao.getEmployeeId(id);
+			Employee employee = employeeDao.getEmployeeById(Integer.parseInt(idParam));
 			if (employee != null) {
 				request.setAttribute("employee", employee);
 				request.setAttribute("isEdit", true); // Flag for JSP to switch to edit mode

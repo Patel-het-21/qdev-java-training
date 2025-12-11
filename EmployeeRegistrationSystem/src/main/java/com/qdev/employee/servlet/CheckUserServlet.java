@@ -32,9 +32,7 @@ public class CheckUserServlet extends HttpServlet {
 	 * @throws IOException      if an I/O error occurs during processing
 	 */
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		/*
 		 * Retrieve parameters from AJAX request
 		 */
@@ -45,12 +43,9 @@ public class CheckUserServlet extends HttpServlet {
 		 * Parse current employee ID (used for update operation)
 		 */
 		int currentId = (idParam != null && !idParam.isEmpty()) ? Integer.parseInt(idParam) : -1;
-
 		boolean userNameExist = false;
 		boolean contactNoExist = false;
-
 		EmployeeDao employeeDao = new EmployeeDao();
-
 		/*
 		 * Username uniqueness validation
 		 */
@@ -78,4 +73,5 @@ public class CheckUserServlet extends HttpServlet {
 		response.setContentType("application/json");
 		response.getWriter().write(json);
 	}
+
 }

@@ -43,13 +43,9 @@ public class EmployeeDeleteServlet extends HttpServlet {
 		if (idParam != null) {
 			try {
 				/**
-				 * Parse the ID to an integer
-				 */
-				int id = Integer.parseInt(idParam);
-				/**
 				 * Delete the employee with the specified ID
 				 */
-				employeeDao.deleteEmployee(id);
+				employeeDao.deleteEmployee(Integer.parseInt(idParam));
 			} catch (NumberFormatException e) {
 				/**
 				 * Handle invalid ID format

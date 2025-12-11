@@ -36,15 +36,10 @@ public class EmployeeViewServlet extends HttpServlet {
 			throws ServletException, IOException {
 		EmployeeDao employeeDao = new EmployeeDao();
 		Employee employee = null;
-
-		/*
-		 * Retrieve ID from request
-		 */
-		int id = Integer.parseInt(request.getParameter("id"));
 		/*
 		 * Fetch employee details from database
 		 */
-		employee = employeeDao.getEmployeeId(id);
+		employee = employeeDao.getEmployeeById(Integer.parseInt(request.getParameter("id")));
 		/*
 		 * Attach employee or error message to request scope
 		 */
