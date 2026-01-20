@@ -1,0 +1,22 @@
+<h2>Teacher Registration (Reactive Form)</h2>
+
+<form [formGroup]="teacherForm" (ngSubmit)="submitForm()">
+
+    <label>Name: &nbsp;&nbsp;</label>
+    <input type="text" formControlName="name">&nbsp;
+    <small *ngIf="teacherForm.get('name')?.invalid && teacherForm.get('name')?.touched">Name is required</small>
+    <br><br>
+
+    <label>Subject: &nbsp;&nbsp;</label>
+    <input type="text" formControlName="subject">&nbsp;
+    <small *ngIf="teacherForm.get('subject')?.invalid && teacherForm.get('subject')?.touched">Subject is required</small>
+    <br><br>
+
+    <label>Experience (Years): &nbsp;&nbsp;</label>
+    <input type="number" formControlName="experience">&nbsp;
+    <small *ngIf="teacherForm.get('experience')?.invalid && teacherForm.get('experience')?.touched">Minimum 1 year experience required</small>
+    <br><br>
+    
+    <button type="submit" [disabled]="teacherForm.invalid">Submit</button>
+
+</form>

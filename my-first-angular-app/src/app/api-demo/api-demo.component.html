@@ -1,0 +1,13 @@
+<h2>User List</h2>
+
+<div *ngIf="loading" class="spinner-container">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div *ngIf="!loading">
+  <ul>
+    <li *ngFor="let user of users">
+      {{ user.name | capitalizeName }} - {{ user.email | uppercase }}
+    </li>
+  </ul>
+</div>

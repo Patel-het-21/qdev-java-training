@@ -1,0 +1,7 @@
+a {
+  color: gray;
+}
+a.active {
+  color: blue;
+  font-weight: bold;
+}

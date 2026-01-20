@@ -1,0 +1,25 @@
+<button (click)="toggleTheme()">
+  Toggle Dark / Light
+</button>
+
+<app-student></app-student>
+<app-teacher></app-teacher>
+
+<h1>Angular 17 Routing Demo</h1>
+
+<nav>
+  <a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a> |
+  <a routerLink="about" routerLinkActive="active">About</a> |
+  <a routerLink="contact" routerLinkActive="active">Contact</a> | 
+  <a routerLink="api-demo" routerLinkActive="active">API Demo</a>
+</nav>
+
+<hr>
+
+<router-outlet></router-outlet>
+
+<app-parent></app-parent>
+<button mat-button color="primary">Text</button>
+<button mat-flat-button color="accent">Flat</button>
+<button mat-raised-button color="primary">Raised</button>
+<button mat-stroked-button color="warn">Stroked</button>
