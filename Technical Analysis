@@ -1,0 +1,107 @@
+Technical Analysis
+
+Tech Stack
+	Frontend : JSP, CSS, JS
+	Backend : Sring Boot, Java 11
+	Database : MySQL
+	Server: Embedded Tomcat 
+
+Flow of Application - chart
+
+UI(Responsive)
+
+First Name:
+Required
+Minimum length: 2, Maximum length: 50
+Only alphabets and spaces allowed
+Special characters or numbers trigger an error
+Prevent pasting more than maximum characters
+Validate on onblur event
+
+Last Name:
+Required
+Minimum length: 2, Maximum length: 50
+Only alphabets and spaces allowed
+Special characters or numbers trigger an error
+Prevent pasting more than maximum characters
+Validate on onblur event
+
+Date of Birth (DOB):
+Required
+Age must be between 18 and 110 years
+Validate on onblur event
+
+Mobile:
+Required
+Maximum 10 digits
+Only numeric characters allowed
+Cannot start with 0
+Must be unique (no duplicate numbers)
+Validate on onblur event
+
+Password:
+Required
+Encrypted
+Minimum length: 8, Maximum length: 30
+Must satisfy regex pattern (e.g., uppercase, lowercase, number, special character)
+No spaces allowed
+Prevent pasting beyond maximum length
+Password toggle feature available
+Validate on onblur event
+
+Address 1:
+Required
+Maximum length allowed
+Accept all characters
+
+Address 2:
+Optional
+Maximum length same as Address 1
+Accept all characters
+
+Age:
+Auto-calculated from DOB
+Display only; cannot be manually entered
+Shown during both edit and submission
+
+Gender:
+Required
+Must select one option (radio buttons)
+
+Email:
+Required
+Must be a valid email format
+Must be unique (no duplicate emails)
+Validate on onblur event
+
+
+
+Valid then submit
+
+Controller (@RestController) ----> RequestDTO validation ----> Service interface (CustomerService) ----> ServiceImpl (CustomerServiceImpl) ----> Repository (CustomerRepository) → Database
+Repository (CustomerRepository) ----> ResponseDTO ----> Controller ----> JSON Response ----> Client
+
+
+RestController ---> EmployeeController
+Service ----------> EmployeeService
+ServiceImpl ------> EmployeeServiceImpl
+DTO --------------> RequestDto and ResponceDto
+Repository -------> EmployeeREpository
+Entity -----------> Employee
+
+RestApi go to frontend and access data
+
+
+| Column Name     | Data Type                     | Constraints / Notes                                          |
+| --------------- | ----------------------------- | ------------------------------------------------------------ |
+| `id`            | LONG                          | Primary Key, Auto Increment                                  |
+| `first_name`    | VARCHAR(50)                   | Required, min 2, max 50, alphabets and spaces only           |
+| `last_name`     | VARCHAR(50)                   | Required, min 2, max 50, alphabets and spaces only           |
+| `date_of_birth` | DATE                          | Required, age between 18 and 110                             |
+| `mobile`        | VARCHAR(10)                   | Required, unique, only digits,	                         |
+| `password`      | VARCHAR(255)                  | Required, min 8, max 30                                      |
+| `address1`      | VARCHAR(255)                  | Required                                                     |
+| `address2`      | VARCHAR(255)                  | Optional                                                     |
+| `age`           | INT                           | Auto-calculated from DOB, cannot be manually edited          |
+| `gender`        | VARCHAR(10)                   | Required, must select one option                             |
+| `email`         | VARCHAR(100)                  | Required, unique, valid email format                         |
