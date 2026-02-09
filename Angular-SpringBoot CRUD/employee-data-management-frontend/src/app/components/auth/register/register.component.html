@@ -1,0 +1,90 @@
+<!-- <div class="container">
+  <h1>Company Registration</h1>
+  
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    
+    <div class="form-group">
+      <label>Company Name</label>
+      <input type="text" formControlName="companyName" placeholder="Enter company name">
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" formControlName="email" placeholder="Enter email">
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" formControlName="password" placeholder="Enter password">
+    </div>  
+
+    <div class="center">
+      <button type="submit" class="btn btn-submit">Register</button>
+    </div>
+
+    <div class="link-text">
+      Already have an account? <a routerLink="/login">Login here</a>
+    </div>
+  </form>
+</div> -->
+<div class="container">
+  <h1>Company Registration</h1>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+    <!-- Company Name -->
+    <div class="form-group">
+      <label>Company Name *</label>
+      <input type="text" formControlName="companyName" placeholder="Enter company name"
+        [class.input-error]="f['companyName'].invalid && (f['companyName'].touched || f['companyName'].dirty)"
+        [class.max-reached]="f['companyName'].value?.length === 100">
+
+      <div class="error" *ngIf="(f['companyName'].touched || f['companyName'].dirty) && f['companyName'].errors">
+        <span *ngIf="f['companyName'].errors?.['required']">Company name is required</span>
+        <span *ngIf="f['companyName'].errors?.['minlength']">Minimum 2 characters required</span>
+        <span *ngIf="f['companyName'].errors?.['companyExists']">Company name already taken</span>
+      </div>
+
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label>Email *</label>
+      <input type="email" formControlName="email" placeholder="Enter email"
+        [class.input-error]="f['email'].invalid && (f['email'].touched || f['email'].dirty)"
+        [class.max-reached]="f['email'].value?.length === 254">
+
+      <div class="error" *ngIf="(f['email'].touched || f['email'].dirty) && f['email'].errors">
+        <span *ngIf="f['email'].errors?.['required']">Email is required</span>
+        <span *ngIf="f['email'].errors?.['pattern']">Enter a valid email</span>
+        <span *ngIf="f['email'].errors?.['emailExists']">Email already registered</span>
+      </div>
+
+    </div>
+
+    <!-- Password -->
+    <div class="form-group">
+      <label>Password *</label>
+      <input type="password" formControlName="password" placeholder="Enter password"
+        [class.input-error]="f['password'].invalid && (f['password'].touched || f['password'].dirty)">
+
+      <div class="error" *ngIf="(f['password'].touched || f['password'].dirty) && f['password'].errors">
+        <span *ngIf="f['password'].errors?.['required']">Password is required</span>
+        <span *ngIf="f['password'].errors?.['minlength']">Minimum 6 characters required</span>
+        <span *ngIf="f['password'].errors?.['pattern']">Must contain letters and numbers</span>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="center">
+      <button type="submit" class="btn btn-submit" [disabled]="registerForm.invalid || loading"
+        [class.enabled]="registerForm.valid && !loading">
+        {{ loading ? 'Registering...' : 'Register' }}
+      </button>
+    </div>
+
+    <div class="link-text">
+      Already have an account? <a routerLink="/login">Login here</a>
+    </div>
+  </form>
+</div>
