@@ -34,7 +34,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // =====================
 // Form Validation & Submission
-// =====================
+/**
+ * Handle employee form submission: validate fields, send a create or update request to the employees API, and navigate back to the list on success.
+ * Prevents the form's default submission, builds an employee payload from form fields, and issues a POST (create) when no id is present or a PUT (update) when an id is present.
+ * On request failure, `handleError` is invoked.
+ * @param {Event} e - The submit event from the employee form.
+ */
 function handleFormSubmit(e) {
 	e.preventDefault();
 	const id = document.getElementById("employeeId").value;
@@ -63,6 +68,15 @@ function handleFormSubmit(e) {
 	}
 }
 
+/**
+ * Validate employee form fields and display inline error messages for any invalid inputs.
+ *
+ * Validates: firstName and lastName (2–50 letters/spaces), dateOfBirth (required; age between 18 and 110),
+ * mobile (10 digits, not starting with 0), email format, gender selection, and address1 (required).
+ * Sets per-field error text in adjacent ".invalid-feedback" elements or a dedicated gender error element.
+ *
+ * @returns {boolean} `true` if all validations pass, `false` otherwise.
+ */
 function validateForm() {
 	let valid = true;
 	const firstName = document.getElementById("firstName");
@@ -127,6 +141,11 @@ function validateForm() {
 	return valid;
 }
 
+/**
+ * Compute the age from the date-of-birth input, update the #age field with the result, and return it.
+ *
+ * @returns {number|undefined} The computed age in years, or `undefined` if the date-of-birth input is empty or invalid.
+ */
 function calculateAge() {
 	const dobInput = document.getElementById("dateOfBirth");
 	if (!dobInput.value) return;
@@ -137,6 +156,10 @@ function calculateAge() {
 	return age;
 }
 
+/**
+ * Displays an error to the user via alert, preferring `error.response.data` when present.
+ * @param {object} error - The error object (may be an HTTP or generic error); shows `error.response.data` if available, otherwise shows `error.message`.
+ */
 function handleError(error) {
 	if (error.response && error.response.data) {
 		alert(JSON.stringify(error.response.data));
@@ -147,7 +170,12 @@ function handleError(error) {
 
 // =====================
 // Employee List
-// =====================
+/**
+ * Load employees from the API and update the list view.
+ *
+ * Fetches the employee collection from the server, replaces the local `employees` array,
+ * resets `currentPage` to 1, and re-renders the table and pagination controls.
+ */
 function fetchEmployees() {
 	axios.get(apiBase).then(res => {
 		employees = res.data;
@@ -157,6 +185,13 @@ function fetchEmployees() {
 	}).catch(handleError);
 }
 
+/**
+ * Render the current page of employees into the table body with id "employeeTableBody".
+ *
+ * Clears the table body, slices the global `employees` array using `currentPage` and `pageSize`,
+ * and appends a row per employee containing id, full name, date of birth, age, mobile, email,
+ * gender, address, and action controls (Edit link and Delete button).
+ */
 function renderTable() {
 	const tbody = document.getElementById("employeeTableBody");
 	tbody.innerHTML = "";
@@ -182,6 +217,13 @@ function renderTable() {
 	});
 }
 
+/**
+ * Render pagination controls for the employee list and wire page click handlers.
+ *
+ * Updates the element with id "pagination" to show page items computed from the current
+ * employees array and pageSize, highlights the current page, and attaches click handlers
+ * that set `currentPage` and re-render the table and pagination.
+ */
 function renderPagination() {
 	const totalPages = Math.ceil(employees.length / pageSize);
 	const pagination = document.getElementById("pagination");
@@ -195,6 +237,10 @@ function renderPagination() {
 	}
 }
 
+/**
+ * Prompt for confirmation and delete the employee with the given id, then refresh the employee list.
+ * @param {number|string} id - The identifier of the employee to delete.
+ */
 function deleteEmployee(id) {
 	if (confirm("Are you sure to delete?")) {
 		axios.delete(`${apiBase}/${id}`)
@@ -203,6 +249,12 @@ function deleteEmployee(id) {
 	}
 }
 
+/**
+ * Filters the employee list by the search box query and updates the displayed page.
+ *
+ * Fetches the current employees from the API, filters them case-insensitively by first name, last name, or full name using the search input value, resets the current page to 1, and re-renders the table and pagination. On request failure, forwards the error to the centralized error handler.
+ * @param {Event} e - Input event from the search box; its target's value is used as the search query.
+ */
 function handleSearch(e) {
 	const query = e.target.value.toLowerCase();
 	currentPage = 1;

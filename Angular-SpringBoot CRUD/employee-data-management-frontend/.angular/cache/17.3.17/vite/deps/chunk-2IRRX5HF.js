@@ -269,6 +269,12 @@ var HttpHeaders = class _HttpHeaders {
     Array.from(this.normalizedNames.keys()).forEach((key) => fn(this.normalizedNames.get(key), this.headers.get(key)));
   }
 };
+/**
+ * Validate that each header value is a string, number, or an array.
+ *
+ * @param {Object<string, string|number|Array>} headers - Object map of header names to values.
+ * @throws {Error} If any header value is not a string, number, or array.
+ */
 function assertValidHeaders(headers) {
   for (const [key, value] of Object.entries(headers)) {
     if (!(typeof value === "string" || typeof value === "number") && !Array.isArray(value)) {
@@ -310,6 +316,12 @@ var HttpUrlEncodingCodec = class {
     return decodeURIComponent(value);
   }
 };
+/**
+ * Parse a raw query string into a Map of decoded parameter names to arrays of decoded values.
+ * @param {string} rawParams - The raw query string (may include a leading '?').
+ * @param {{decodeKey: function(string): string, decodeValue: function(string): string}} codec - Codec used to decode parameter keys and values.
+ * @returns {Map<string, string[]>} A map where each key is a decoded parameter name and each value is an array of decoded parameter values in occurrence order.
+ */
 function paramParser(rawParams, codec) {
   const map2 = /* @__PURE__ */ new Map();
   if (rawParams.length > 0) {
@@ -335,9 +347,19 @@ var STANDARD_ENCODING_REPLACEMENTS = {
   "3F": "?",
   "2F": "/"
 };
+/**
+ * Encode a string for URL query usage, then map specific percent-encodings back to allowed characters.
+ * @param {string} v - The input value to encode.
+ * @returns {string} The encoded string with certain percent-encoded sequences replaced by their allowed character equivalents.
+ */
 function standardEncoding(v) {
   return encodeURIComponent(v).replace(STANDARD_ENCODING_REGEX, (s, t) => STANDARD_ENCODING_REPLACEMENTS[t] ?? s);
 }
+/**
+ * Convert a value to its string representation.
+ * @param {*} value - The value to convert.
+ * @returns {string} The string representation of `value`.
+ */
 function valueToString(value) {
   return `${value}`;
 }
@@ -586,6 +608,11 @@ var HttpContext = class {
     return this.map.keys();
   }
 };
+/**
+ * Determine whether an HTTP method may include a request body.
+ * @param {string} method - The HTTP method name (uppercase), e.g. "GET", "POST".
+ * @returns {boolean} `true` if the method may include a request body, `false` otherwise.
+ */
 function mightHaveBody(method) {
   switch (method) {
     case "DELETE":
@@ -598,15 +625,35 @@ function mightHaveBody(method) {
       return true;
   }
 }
+/**
+ * Determines whether a value is an ArrayBuffer.
+ * @param {*} value - The value to test.
+ * @returns {boolean} `true` if the value is an ArrayBuffer, `false` otherwise.
+ */
 function isArrayBuffer(value) {
   return typeof ArrayBuffer !== "undefined" && value instanceof ArrayBuffer;
 }
+/**
+ * Determines whether a value is a Blob.
+ * @param {?} value - The value to test.
+ * @returns {boolean} `true` if `value` is a `Blob`, `false` otherwise.
+ */
 function isBlob(value) {
   return typeof Blob !== "undefined" && value instanceof Blob;
 }
+/**
+ * Determines whether a value is a FormData instance.
+ * @param {*} value - The value to test.
+ * @returns {boolean} `true` if `value` is a `FormData` instance, `false` otherwise.
+ */
 function isFormData(value) {
   return typeof FormData !== "undefined" && value instanceof FormData;
 }
+/**
+ * Checks whether a value is an instance of `URLSearchParams` in the current runtime.
+ * @param {*} value - The value to test.
+ * @returns {boolean} `true` if `value` is an instance of `URLSearchParams`, `false` otherwise.
+ */
 function isUrlSearchParams(value) {
   return typeof URLSearchParams !== "undefined" && value instanceof URLSearchParams;
 }
@@ -878,6 +925,12 @@ var HttpStatusCode;
   HttpStatusCode2[HttpStatusCode2["NotExtended"] = 510] = "NotExtended";
   HttpStatusCode2[HttpStatusCode2["NetworkAuthenticationRequired"] = 511] = "NetworkAuthenticationRequired";
 })(HttpStatusCode || (HttpStatusCode = {}));
+/**
+ * Create a new HTTP request options object by attaching the provided body and copying relevant option fields.
+ * @param {Object} options - Existing request options containing headers, context, observe, params, reportProgress, responseType, withCredentials, and transferCache.
+ * @param {*} body - The request body to include on the returned options object.
+ * @returns {Object} An options object with the `body` set and other option fields copied from `options`.
+ */
 function addBody(options, body) {
   return {
     body,
@@ -1104,6 +1157,11 @@ var HttpClient = class _HttpClient {
 })();
 var XSSI_PREFIX$1 = /^\)\]\}',?\n/;
 var REQUEST_URL_HEADER = `X-Request-URL`;
+/**
+ * Obtain the final response URL from a response object.
+ * @param {object} response - Response object with `url` and `headers` properties.
+ * @returns {string|null} The response `url` if present; otherwise the value of the request URL header, or `null` if none is available.
+ */
 function getResponseUrl$1(response) {
   if (response.url) {
     return response.url;
@@ -1296,19 +1354,51 @@ var FetchBackend = class _FetchBackend {
 })();
 var FetchFactory = class {
 };
+/**
+ * A function that performs no operation.
+ *
+ * Used as a safe placeholder where a callback or function is required.
+ */
 function noop() {
 }
+/**
+ * Suppresses unhandled rejection warnings for the given promise.
+ *
+ * The provided promise will no longer trigger unhandled-rejection diagnostics when it rejects,
+ * but its fulfillment value or rejection reason is not propagated by this helper.
+ * @param {Promise<any>} promise - The promise whose unhandled rejection should be suppressed.
+ */
 function silenceSuperfluousUnhandledPromiseRejection(promise) {
   promise.then(noop, noop);
 }
+/**
+ * Invoke the final HTTP handler in the chain with the given request.
+ * @param {any} req - The HTTP request to forward to the final handler.
+ * @param {(req: any) => any} finalHandlerFn - Function that handles the request and produces the final response/event stream.
+ * @returns {any} The result produced by the final handler (typically an observable of HTTP events).
+ */
 function interceptorChainEndFn(req, finalHandlerFn) {
   return finalHandlerFn(req);
 }
+/**
+ * Wraps a legacy interceptor object into a chain-compatible interceptor function.
+ *
+ * @param {function(any, function): any} chainTailFn - Function that advances a request to the remainder of the interceptor chain; invoked as `chainTailFn(request, finalHandler)`.
+ * @param {{intercept: function(any, {handle: function}): any}} interceptor - Legacy interceptor instance implementing `intercept(request, handler)`.
+ * @returns {function(any, function): any} A function that applies the legacy interceptor to an initial request and forwards downstream requests to the provided final handler.
 function adaptLegacyInterceptorToChain(chainTailFn, interceptor) {
   return (initialRequest, finalHandlerFn) => interceptor.intercept(initialRequest, {
     handle: (downstreamRequest) => chainTailFn(downstreamRequest, finalHandlerFn)
   });
 }
+/**
+ * Creates an interceptor function that executes a given interceptor inside a specific injection context and delegates downstream.
+ *
+ * @param {Function} chainTailFn - Function that continues the interceptor chain; called with (request, finalHandler).
+ * @param {Function} interceptorFn - Interceptor function to run; called with (request, next) and expected to delegate to `next`.
+ * @param {!Object} injector - Injection context used to run the interceptor.
+ * @returns {Function} A function that takes (initialRequest, finalHandlerFn) and returns the result of running `interceptorFn` within the provided injection context, delegating onward via `chainTailFn`. 
+ */
 function chainedInterceptorFn(chainTailFn, interceptorFn, injector) {
   return (initialRequest, finalHandlerFn) => runInInjectionContext(injector, () => interceptorFn(initialRequest, (downstreamRequest) => chainTailFn(downstreamRequest, finalHandlerFn)));
 }
@@ -1316,6 +1406,14 @@ var HTTP_INTERCEPTORS = new InjectionToken(ngDevMode ? "HTTP_INTERCEPTORS" : "")
 var HTTP_INTERCEPTOR_FNS = new InjectionToken(ngDevMode ? "HTTP_INTERCEPTOR_FNS" : "");
 var HTTP_ROOT_INTERCEPTOR_FNS = new InjectionToken(ngDevMode ? "HTTP_ROOT_INTERCEPTOR_FNS" : "");
 var PRIMARY_HTTP_BACKEND = new InjectionToken(ngDevMode ? "PRIMARY_HTTP_BACKEND" : "");
+/**
+ * Creates an interceptor factory that adapts legacy DI-provided `HTTP_INTERCEPTORS` into
+ * the new handler chain and wraps each request to track its lifecycle with `PendingTasks`.
+ *
+ * @returns {function} A request interceptor function with signature `(req, handler) => Observable`
+ * which forwards the request through the adapted legacy interceptor chain and removes the
+ * `PendingTasks` entry when the request completes.
+ */
 function legacyInterceptorFnFactory() {
   let chain = null;
   return (req, handler) => {
@@ -1387,6 +1485,11 @@ var JSONP_ERR_WRONG_RESPONSE_TYPE = "JSONP requests must use Json response type.
 var JSONP_ERR_HEADERS_NOT_SUPPORTED = "JSONP requests do not support headers.";
 var JsonpCallbackContext = class {
 };
+/**
+ * Provide an object to attach JSONP callback functions to.
+ *
+ * @returns {object} The global `window` object when running in a browser environment, otherwise a plain empty object suitable as a callback context.
+ */
 function jsonpCallbackContext() {
   if (typeof window === "object") {
     return window;
@@ -1511,6 +1614,12 @@ var JsonpClientBackend = class _JsonpClientBackend {
     }]
   }], null);
 })();
+/**
+ * Routes requests with method "JSONP" to the JsonpClientBackend; forwards all other requests to the next handler.
+ * @param {import('./http').HttpRequest} req - The outgoing HTTP request.
+ * @param {function(import('./http').HttpRequest): import('rxjs').Observable<any>} next - The next handler in the chain.
+ * @returns {import('rxjs').Observable<any>} An observable of HTTP events produced by the selected handler.
+ */
 function jsonpInterceptorFn(req, next) {
   if (req.method === "JSONP") {
     return inject(JsonpClientBackend).handle(req);
@@ -1551,6 +1660,11 @@ var JsonpInterceptor = class _JsonpInterceptor {
   }], null);
 })();
 var XSSI_PREFIX = /^\)\]\}',?\n/;
+/**
+ * Obtain the final response URL from an XMLHttpRequest, if available.
+ * @param {XMLHttpRequest} xhr - The XHR instance to read the response URL from.
+ * @returns {string|null} The response URL if present on the XHR or via the `X-Request-URL` response header, `null` otherwise.
+ */
 function getResponseUrl(xhr) {
   if ("responseURL" in xhr && xhr.responseURL) {
     return xhr.responseURL;
@@ -1824,6 +1938,17 @@ var HttpXsrfCookieExtractor = class _HttpXsrfCookieExtractor {
     }]
   }], null);
 })();
+/**
+ * Adds an XSRF header to outgoing non-GET/HEAD same-origin requests when a token is available.
+ *
+ * If XSRF protection is disabled, the request is cross-origin, or the method is GET or HEAD,
+ * the request is forwarded unchanged. If a token exists and the request does not already
+ * contain the configured XSRF header, a cloned request with the header set is forwarded.
+ *
+ * @param {any} req - The outgoing HTTP request.
+ * @param {function(any): any} next - The next handler in the chain.
+ * @returns {any} The observable stream of HTTP events from the next handler.
+ */
 function xsrfInterceptorFn(req, next) {
   const lcUrl = req.url.toLowerCase();
   if (!inject(XSRF_ENABLED) || req.method === "GET" || req.method === "HEAD" || lcUrl.startsWith("http://") || lcUrl.startsWith("https://")) {
@@ -1874,12 +1999,31 @@ var HttpFeatureKind;
   HttpFeatureKind2[HttpFeatureKind2["RequestsMadeViaParent"] = 5] = "RequestsMadeViaParent";
   HttpFeatureKind2[HttpFeatureKind2["Fetch"] = 6] = "Fetch";
 })(HttpFeatureKind || (HttpFeatureKind = {}));
+/**
+ * Create a descriptor for an HTTP feature containing its kind and DI providers.
+ * @param {HttpFeatureKind} kind - The feature kind identifier.
+ * @param {Array<any>} providers - Dependency-injection providers associated with the feature.
+ * @returns {{ɵkind: HttpFeatureKind, ɵproviders: Array<any>}} Object describing the feature and its providers.
+ */
 function makeHttpFeature(kind, providers) {
   return {
     ɵkind: kind,
     ɵproviders: providers
   };
 }
+/**
+ * Configures and returns environment providers for HttpClient with the given feature descriptors.
+ *
+ * Accepts zero or more Http feature descriptors (objects produced by helper functions like
+ * withInterceptors/withFetch/etc.) and produces a combined set of providers wiring up the core
+ * HttpClient, a default XHR backend, interceptor wiring, and any providers contributed by the
+ * supplied features.
+ *
+ * @param {...{ɵkind: number, ɵproviders: any[]}} features - Feature descriptors that supply a kind
+ *   identifier (`ɵkind`) and an array of providers (`ɵproviders`) to be added to the HTTP setup.
+ * @returns {any} An EnvironmentProviders object containing the merged providers for the HttpClient.
+ * @throws {Error} If both NoXsrfProtection and CustomXsrfConfiguration features are provided together.
+ */
 function provideHttpClient(...features) {
   if (ngDevMode) {
     const featureKinds = new Set(features.map((f) => f.ɵkind));
@@ -1909,6 +2053,11 @@ function provideHttpClient(...features) {
   }
   return makeEnvironmentProviders(providers);
 }
+/**
+ * Creates an HTTP feature descriptor that registers the given interceptor functions.
+ * @param {Function[]} interceptorFns - Array of interceptor factory functions to register with the HTTP system.
+ * @returns {Object} A feature descriptor that provides each function as a multi-provider for `HTTP_INTERCEPTOR_FNS`.
+ */
 function withInterceptors(interceptorFns) {
   return makeHttpFeature(HttpFeatureKind.Interceptors, interceptorFns.map((interceptorFn) => {
     return {
@@ -1919,6 +2068,10 @@ function withInterceptors(interceptorFns) {
   }));
 }
 var LEGACY_INTERCEPTOR_FN = new InjectionToken(ngDevMode ? "LEGACY_INTERCEPTOR_FN" : "");
+/**
+ * Create a feature descriptor that registers legacy DI-based interceptor factories and exposes them as interceptor functions.
+ * @returns {Object} A feature descriptor that provides `LEGACY_INTERCEPTOR_FN` and forwards it into `HTTP_INTERCEPTOR_FNS` (multi).
+ */
 function withInterceptorsFromDi() {
   return makeHttpFeature(HttpFeatureKind.LegacyInterceptors, [{
     provide: LEGACY_INTERCEPTOR_FN,
@@ -1929,6 +2082,13 @@ function withInterceptorsFromDi() {
     multi: true
   }]);
 }
+/**
+ * Creates an HTTP feature that customizes the XSRF cookie and header names.
+ * @param {{cookieName?: string, headerName?: string}} options - Configuration object.
+ * @param {string} [options.cookieName] - Name of the cookie used to read the XSRF token.
+ * @param {string} [options.headerName] - Name of the header to which the XSRF token will be added.
+ * @returns {Object} A feature descriptor that, when provided, supplies the configured XSRF cookie and/or header names.
+ */
 function withXsrfConfiguration({
   cookieName,
   headerName
@@ -1948,12 +2108,20 @@ function withXsrfConfiguration({
   }
   return makeHttpFeature(HttpFeatureKind.CustomXsrfConfiguration, providers);
 }
+/**
+ * Create an HTTP feature descriptor that disables XSRF protection.
+ * @returns {import('./http.mjs').HttpFeatureDescriptor} A feature descriptor which registers `XSRF_ENABLED` with the value `false`.
+ */
 function withNoXsrfProtection() {
   return makeHttpFeature(HttpFeatureKind.NoXsrfProtection, [{
     provide: XSRF_ENABLED,
     useValue: false
   }]);
 }
+/**
+ * Creates an HTTP feature that enables JSONP support.
+ * @returns {object} An HTTP feature descriptor that enables JSONP (includes the JsonpClientBackend, a JsonpCallbackContext provider, and the JSONP interceptor function).
+ */
 function withJsonpSupport() {
   return makeHttpFeature(HttpFeatureKind.JsonpSupport, [JsonpClientBackend, {
     provide: JsonpCallbackContext,
@@ -1964,6 +2132,12 @@ function withJsonpSupport() {
     multi: true
   }]);
 }
+/**
+ * Configure HTTP so requests are forwarded to the parent injector's HTTP handler.
+ *
+ * @returns A feature descriptor that registers HttpBackend to resolve to the parent's HttpHandler, causing outgoing requests to be handled by the parent HttpClient.
+ * @throws {Error} If development mode is enabled and no HttpHandler is available on the parent injector.
+ */
 function withRequestsMadeViaParent() {
   return makeHttpFeature(HttpFeatureKind.RequestsMadeViaParent, [{
     provide: HttpBackend,
@@ -1979,6 +2153,12 @@ function withRequestsMadeViaParent() {
     }
   }]);
 }
+/**
+ * Enable Fetch API–based HTTP backend and register FetchBackend as the primary HttpBackend.
+ *
+ * @returns {import('./').HttpFeatureDescriptor} A feature descriptor that provides FetchBackend and binds it as the HttpBackend and PRIMARY_HTTP_BACKEND.
+ * @throws {Error} If the global `fetch` function is not available (e.g., running on older Node versions); ensures Fetch API is present before enabling the feature.
+ */
 function withFetch() {
   if ((typeof ngDevMode === "undefined" || ngDevMode) && typeof fetch !== "function") {
     throw new Error("The `withFetch` feature of HttpClient requires the `fetch` API to be available. If you run the code in a Node environment, make sure you use Node v18.10 or later.");
@@ -2127,6 +2307,18 @@ var URL = "u";
 var RESPONSE_TYPE = "rt";
 var CACHE_OPTIONS = new InjectionToken(ngDevMode ? "HTTP_TRANSFER_STATE_CACHE_OPTIONS" : "");
 var ALLOWED_METHODS = ["GET", "HEAD"];
+/**
+ * Serves HTTP responses from TransferState when available and stores server responses for eligible requests.
+ *
+ * Uses cache configuration from CACHE_OPTIONS and per-request transferCache settings to determine eligibility.
+ * If a cached response exists for the request key, returns an HttpResponse constructed from the cached payload.
+ * Otherwise forwards the request to the next handler and, when running on the server, stores successful HttpResponse
+ * values in TransferState for later reuse on the client.
+ *
+ * @param {import('./http').HttpRequest} req - The outgoing HTTP request to inspect or forward.
+ * @param {import('rxjs').OperatorFunction|function} next - The next handler in the chain; invoked to continue the request.
+ * @returns {import('rxjs').Observable} An observable stream of HttpEvents; may emit a cached HttpResponse immediately when available.
+ */
 function transferCacheInterceptorFn(req, next) {
   const _a = inject(CACHE_OPTIONS), {
     isCacheActive
@@ -2193,6 +2385,13 @@ function transferCacheInterceptorFn(req, next) {
     }
   }));
 }
+/**
+ * Produce a plain object containing only the specified headers and their values.
+ *
+ * @param {HttpHeaders} headers - Source headers collection.
+ * @param {string[]|null|undefined} includeHeaders - Header names to include; if falsy, no headers are included.
+ * @returns {Object<string, string[]>} An object mapping each requested header name to its array of values; missing headers are omitted and an empty object is returned if `includeHeaders` is falsy.
+ */
 function getFilteredHeaders(headers, includeHeaders) {
   if (!includeHeaders) {
     return {};
@@ -2206,9 +2405,23 @@ function getFilteredHeaders(headers, includeHeaders) {
   }
   return headersMap;
 }
+/**
+ * Serialize a params map into a sorted query-string fragment.
+ * @param {Object} params - Map-like object whose keys() yields iterable keys and whose getAll(key) returns an array of values for that key.
+ * @returns {string} A string of the form `k1=v1,v2&k2=v3` where keys are sorted lexicographically and each key is followed by `=` and the array returned by `getAll` (joined using default array-to-string behavior).
+ */
 function sortAndConcatParams(params) {
   return [...params.keys()].sort().map((k) => `${k}=${params.getAll(k)}`).join("&");
 }
+/**
+ * Create a stable transfer-cache state key for a given HTTP request.
+ *
+ * The key is derived from the request's method, responseType, URL, serialized body (or sorted
+ * params when the body is URLSearchParams), and sorted query parameters, then hashed and
+ * converted to a state key.
+ *
+ * @param {HttpRequest|Object} request - The HTTP request used to compute the cache key.
+ * @returns {string} A TransferState key uniquely representing the request fingerprint.
 function makeCacheKey(request) {
   const {
     params,
@@ -2227,6 +2440,11 @@ function makeCacheKey(request) {
   const hash = generateHash(key);
   return makeStateKey(hash);
 }
+/**
+ * Produces a deterministic 32-bit hash of a string and returns it as a decimal string.
+ * @param {string} value - The input string to hash.
+ * @returns {string} A decimal string representing the computed 32-bit hash.
+ */
 function generateHash(value) {
   let hash = 0;
   for (const char of value) {
@@ -2235,6 +2453,17 @@ function generateHash(value) {
   hash += 2147483647 + 1;
   return hash.toString();
 }
+/**
+ * Configure HTTP transfer-cache providers for server-to-client response transfer.
+ *
+ * Returns a set of providers that enable transfer caching with the given options:
+ * - provides `CACHE_OPTIONS` (merged with `{ isCacheActive: true }`) and records a performance mark,
+ * - registers the `transferCacheInterceptorFn` as a root HTTP interceptor,
+ * - registers an `APP_BOOTSTRAP_LISTENER` that disables the transfer cache after the application becomes stable.
+ *
+ * @param {?Object} [cacheOptions] - Optional overrides for transfer-cache configuration (merged into the default options).
+ * @returns {Array} An array of provider definitions suitable for inclusion in a provider list.
+ */
 function withHttpTransferCache(cacheOptions) {
   return [{
     provide: CACHE_OPTIONS,
@@ -2263,6 +2492,15 @@ function withHttpTransferCache(cacheOptions) {
     }
   }];
 }
+/**
+ * Wraps an HttpHeaders-like object with a proxy that warns when code accesses header values that were not included in server-to-client transfer.
+ *
+ * The proxy forwards all normal properties and methods, but intercepts `get`, `has`, and `getAll` calls to emit a single console warning per header+method when the requested header name is not present in `headersToInclude`.
+ *
+ * @param {string} url - The request URL used in the warning message.
+ * @param {object} headers - The original headers object (HttpHeaders-like) to proxy.
+ * @param {string[]} headersToInclude - List of header names that were included in the transfer cache; accesses to other headers trigger the warning.
+ * @returns {object} A proxied headers object that behaves like the original but logs a warning the first time a non-included header is accessed via `get`, `has`, or `getAll`.
 function appendMissingHeadersDetection(url, headers, headersToInclude) {
   const warningProduced = /* @__PURE__ */ new Set();
   return new Proxy(headers, {

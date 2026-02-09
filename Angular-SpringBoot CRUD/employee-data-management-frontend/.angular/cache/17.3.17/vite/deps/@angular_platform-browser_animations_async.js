@@ -213,6 +213,12 @@ var DynamicDelegationRenderer = class {
     return this.replay !== null && propOrEventName.startsWith(ANIMATION_PREFIX);
   }
 };
+/**
+ * Configure environment providers to enable asynchronous (lazy) animation support.
+ *
+ * @param {string} type - Specifies the animation mode. Use `"noop"` to disable real animations (provides `NoopAnimations`); any other value enables browser animations (`BrowserAnimations`). Defaults to `"animations"`.
+ * @returns {import('@angular/core').EnvironmentProviders} Environment providers that register an async-capable RendererFactory2 and provide the `ANIMATION_MODULE_TYPE` value. 
+ */
 function provideAnimationsAsync(type = "animations") {
   performanceMarkFeature("NgAsyncAnimations");
   return makeEnvironmentProviders([{

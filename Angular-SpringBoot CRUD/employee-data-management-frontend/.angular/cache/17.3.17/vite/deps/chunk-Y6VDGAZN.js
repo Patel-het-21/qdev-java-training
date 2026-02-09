@@ -142,10 +142,19 @@ var BrowserDomAdapter = class _BrowserDomAdapter extends GenericBrowserDomAdapte
   }
 };
 var baseElement = null;
+/**
+ * Retrieve the href attribute from the document's <base> element, if present.
+ * @returns {string|null} The base href value, or `null` if no <base> element or no `href` attribute is found.
+ */
 function getBaseElementHref() {
   baseElement = baseElement || document.querySelector("base");
   return baseElement ? baseElement.getAttribute("href") : null;
 }
+/**
+ * Resolve a URL against the document base and return its pathname.
+ * @param {string} url - The URL or path to resolve (absolute or relative).
+ * @returns {string} The pathname component of the resolved URL (leading slash, without query string or fragment).
+ */
 function relativePath(url) {
   return new URL(url, document.baseURI).pathname;
 }
@@ -481,12 +490,28 @@ var REMOVE_STYLES_ON_COMPONENT_DESTROY = new InjectionToken(ngDevMode ? "RemoveS
   providedIn: "root",
   factory: () => REMOVE_STYLES_ON_COMPONENT_DESTROY_DEFAULT
 });
+/**
+ * Generates the component-scoped content attribute for the provided component short id.
+ * @param {string} componentShortId - Short identifier for the component used to build the attribute.
+ * @returns {string} The content attribute string (e.g., `"_ngcontent-<id>"`) to apply to component elements for emulated encapsulation.
+ */
 function shimContentAttribute(componentShortId) {
   return CONTENT_ATTR.replace(COMPONENT_REGEX, componentShortId);
 }
+/**
+ * Generate the host attribute name used to scope styles for a component.
+ * @param {string} componentShortId - Short unique identifier for the component.
+ * @returns {string} The host attribute name to apply to the component's host element.
+ */
 function shimHostAttribute(componentShortId) {
   return HOST_ATTR.replace(COMPONENT_REGEX, componentShortId);
 }
+/**
+ * Replace component placeholder tokens in an array of CSS strings with a component-specific id.
+ * @param {string} compId - The component identifier used to replace each placeholder token.
+ * @param {string[]} styles - Array of CSS strings that may contain the placeholder pattern defined by `COMPONENT_REGEX`.
+ * @returns {string[]} Array of CSS strings with all placeholder tokens replaced by `compId`.
+ */
 function shimStylesContent(compId, styles) {
   return styles.map((s) => s.replace(COMPONENT_REGEX, compId));
 }
@@ -735,6 +760,13 @@ var DefaultDomRenderer2 = class {
   }
 };
 var AT_CHARCODE = (() => "@".charCodeAt(0))();
+/**
+ * Validate that a property name is not a synthetic animation property (prefixed with `@`).
+ *
+ * @param {string} name - The property name to check.
+ * @param {string} nameKind - Contextual label used in the error message (e.g., "binding" or "property").
+ * @throws {RuntimeError} Error with code 5105 when `name` starts with `@`, indicating a synthetic animation property was found and suggesting importing animation modules or declaring the animation in the component.
+ */
 function checkNoSyntheticProp(name, nameKind) {
   if (name.charCodeAt(0) === AT_CHARCODE) {
     throw new RuntimeError(5105, `Unexpected synthetic ${nameKind} ${name} found. Please make sure that:
@@ -742,6 +774,11 @@ function checkNoSyntheticProp(name, nameKind) {
   - There is corresponding configuration for the animation named \`${name}\` defined in the \`animations\` field of the \`@Component\` decorator (see https://angular.io/api/core/Component#animations).`);
   }
 }
+/**
+ * Determines whether a node is an HTML <template> element that exposes a `content` fragment.
+ * @param {Node} node - The node to test.
+ * @returns {boolean} `true` if the node is a `<template>` element with a defined `content`, `false` otherwise.
+ */
 function isTemplateNode(node) {
   return node.tagName === "TEMPLATE" && node.content !== void 0;
 }
@@ -1023,29 +1060,62 @@ var KeyEventsPlugin = class _KeyEventsPlugin extends EventManagerPlugin {
     }]
   }], null);
 })();
+/**
+ * Bootstraps an Angular application using the given root component and optional configuration.
+ *
+ * @param {any} rootComponent - The root component to bootstrap as the application entry point.
+ * @param {Object} [options] - Optional bootstrap configuration (providers, platform options, etc.).
+ * @returns {any} The created application reference.
 function bootstrapApplication(rootComponent, options) {
   return internalCreateApplication(__spreadValues({
     rootComponent
   }, createProvidersConfig(options)));
 }
+/**
+ * Creates a new application configured with the provided options.
+ * @param {Object=} options - Configuration options that influence providers and platform setup for the application.
+ * @returns {any} The created application instance configured according to the provided options.
+ */
 function createApplication(options) {
   return internalCreateApplication(createProvidersConfig(options));
 }
+/**
+ * Assemble application and platform provider arrays for bootstrapping the browser application.
+ *
+ * @param {Object} [options] - Optional configuration for providers.
+ * @param {Array} [options.providers] - Additional application-level providers to append to the default browser module providers.
+ * @returns {{appProviders: Array, platformProviders: Array}} An object containing `appProviders` (the combined application providers) and `platformProviders` (the internal browser platform providers).
+ */
 function createProvidersConfig(options) {
   return {
     appProviders: [...BROWSER_MODULE_PROVIDERS, ...options?.providers ?? []],
     platformProviders: INTERNAL_BROWSER_PLATFORM_PROVIDERS
   };
 }
+/**
+ * Provide the set of DI providers that enable Protractor-compatible testability support.
+ * @return {Array} An array of dependency-injection providers that enable the legacy Protractor testability APIs.
+ */
 function provideProtractorTestingSupport() {
   return [...TESTABILITY_PROVIDERS];
 }
+/**
+ * Install BrowserDomAdapter as the current platform DOM adapter.
+ */
 function initDomAdapter() {
   BrowserDomAdapter.makeCurrent();
 }
+/**
+ * Create the platform's ErrorHandler instance used to handle uncaught errors.
+ * @returns {ErrorHandler} The created ErrorHandler instance.
+ */
 function errorHandler() {
   return new ErrorHandler();
 }
+/**
+ * Initialize the platform's root document and provide the global Document object.
+ * @returns {Document} The global `document` object.
+ */
 function _document() {
   setDocument(document);
   return document;
@@ -1360,6 +1430,12 @@ var Title = class _Title {
     }]
   }], null);
 })();
+/**
+ * Expose a value on the global `ng` namespace when running uncompiled (development) builds.
+ * Assigns `value` to `global.ng[name]` only if the `COMPILED` flag is undefined or falsy.
+ * @param {string} name - The property name to set on the global `ng` object.
+ * @param {*} value - The value to expose under the given name.
+ */
 function exportNgVar(name, value) {
   if (typeof COMPILED === "undefined" || !COMPILED) {
     const ng = _global["ng"] = _global["ng"] || {};
@@ -1416,10 +1492,21 @@ var AngularProfiler = class {
   }
 };
 var PROFILER_GLOBAL_NAME = "profiler";
+/**
+ * Exposes an AngularProfiler for the provided application root reference on the global debug variable and returns that reference.
+ * @param {*} ref - The application root or component reference used to initialize the profiler.
+ * @returns {*} The same reference that was passed in.
+ */
 function enableDebugTools(ref) {
   exportNgVar(PROFILER_GLOBAL_NAME, new AngularProfiler(ref));
   return ref;
 }
+/**
+ * Disables Angular's debug tooling by clearing the global profiler reference.
+ *
+ * Clears the global profiler stored under the profiler global name so debug tools
+ * and external profilers can no longer access the profiler instance.
+ */
 function disableDebugTools() {
   exportNgVar(PROFILER_GLOBAL_NAME, null);
 }
@@ -1460,6 +1547,12 @@ var By = class {
     return (debugNode) => debugNode.providerTokens.indexOf(type) !== -1;
   }
 };
+/**
+ * Checks whether a node is an element and matches a given CSS selector.
+ * @param {Node} n - The node to test.
+ * @param {string} selector - The CSS selector to match against.
+ * @returns {boolean} `true` if `n` is an element node that matches `selector`, `false` otherwise.
+ */
 function elementMatches(n, selector) {
   if (getDOM().isElementNode(n)) {
     return n.matches && n.matches(selector) || n.msMatchesSelector && n.msMatchesSelector(selector) || n.webkitMatchesSelector && n.webkitMatchesSelector(selector);
@@ -1837,18 +1930,38 @@ var HydrationFeatureKind;
   HydrationFeatureKind2[HydrationFeatureKind2["NoHttpTransferCache"] = 0] = "NoHttpTransferCache";
   HydrationFeatureKind2[HydrationFeatureKind2["HttpTransferCacheOptions"] = 1] = "HttpTransferCacheOptions";
 })(HydrationFeatureKind || (HydrationFeatureKind = {}));
+/**
+ * Create a hydration feature descriptor used to register hydration-related providers.
+ * @param {number|string} ɵkind - Identifier for the hydration feature kind.
+ * @param {Array} [ɵproviders=[]] - DI providers associated with this hydration feature.
+ * @param {Object} [ɵoptions={}] - Reserved options for the feature (currently unused).
+ * @returns {{ɵkind: number|string, ɵproviders: Array}} An object describing the hydration feature, containing the feature kind and its providers.
+ */
 function hydrationFeature(ɵkind, ɵproviders = [], ɵoptions = {}) {
   return {
     ɵkind,
     ɵproviders
   };
 }
+/**
+ * Create a hydration feature descriptor that disables HTTP transfer cache during client hydration.
+ * @returns {import('./path').HydrationFeatureDescriptor} A hydration feature descriptor that signals no HTTP transfer cache should be used.
+ */
 function withNoHttpTransferCache() {
   return hydrationFeature(HydrationFeatureKind.NoHttpTransferCache);
 }
+/**
+ * Creates a hydration feature descriptor that enables HTTP transfer cache with the provided options.
+ * @param {Object} options - Configuration options for the HTTP transfer cache.
+ * @returns {Object} A hydration feature descriptor for `HydrationFeatureKind.HttpTransferCacheOptions` configured with the supplied options.
+ */
 function withHttpTransferCacheOptions(options) {
   return hydrationFeature(HydrationFeatureKind.HttpTransferCacheOptions, withHttpTransferCache(options));
 }
+/**
+ * Provides an environment initializer that warns when hydration is enabled with a non-standard NgZone.
+ * @return {Array<Object>} An array containing an `ENVIRONMENT_INITIALIZER` provider which checks the injected `NgZone` and emits a console warning if its constructor is not the framework `NgZone`.
+ */
 function provideZoneJsCompatibilityDetector() {
   return [{
     provide: ENVIRONMENT_INITIALIZER,
@@ -1863,6 +1976,16 @@ function provideZoneJsCompatibilityDetector() {
     multi: true
   }];
 }
+/**
+ * Assembles environment providers for client-side hydration based on the supplied hydration feature descriptors.
+ *
+ * Each feature descriptor should be created by the hydration helpers (e.g. `withNoHttpTransferCache`, `withHttpTransferCacheOptions`)
+ * and is expected to expose `ɵproviders` (an array of providers) and `ɵkind` (a HydrationFeatureKind value).
+ *
+ * @param {...Object} features - One or more hydration feature descriptors containing `ɵproviders` and `ɵkind`.
+ * @returns {EnvironmentProviders} The composed environment providers configured for the requested hydration features.
+ * @throws {Error} In development mode, throws if both `NoHttpTransferCache` and `HttpTransferCacheOptions` features are provided together.
+ */
 function provideClientHydration(...features) {
   const providers = [];
   const featuresKind = /* @__PURE__ */ new Set();
