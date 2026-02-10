@@ -20,12 +20,20 @@ let isEditMode = false;
 let originalData = {};
 const API_URL = "http://localhost:9090/api/v1/employees";
 
-// -------- HELPER TO GET QUERY PARAM --------
+/**
+ * Retrieve the value of a query parameter from the current page URL.
+ * @param {string} name - The query parameter name to look up.
+ * @returns {string|null} The parameter value if present, or `null` if absent.
+ */
 function getParam(name) {
 	return new URLSearchParams(window.location.search).get(name);
 }
 
-// -------- UPDATE BUTTON LOGIC --------
+/**
+ * Update the submit button's disabled state and "enabled" CSS class based on form validity and mode.
+ *
+ * In edit mode, the button is enabled only when all fields are valid and the form values have changed; in create mode, it is enabled when all fields are valid. The function also toggles the "enabled" class to reflect the button's enabled state.
+ */
 function updateSubmitButton() {
 	const allValid = Object.values(validity).every(v => v);
 	const btn = document.getElementById("submitBtn");
@@ -39,7 +47,16 @@ function updateSubmitButton() {
 	}
 }
 
-// -------- ERROR HANDLING --------
+/**
+ * Mark a form input as errored, display an error message, and update form validity state.
+ *
+ * Adds an error visual state to the input identified by `id`, sets the error text on the element
+ * with `errorId`, marks the corresponding validity flag as false, and refreshes the submit button state.
+ *
+ * @param {string} id - The DOM id of the input element to mark as errored.
+ * @param {string} errorId - The DOM id of the element where the error message should be shown.
+ * @param {string} msg - The error message to display.
+ */
 function setError(id, errorId, msg) {
 	document.getElementById(id).classList.add("input-error");
 	document.getElementById(errorId).innerText = msg;
@@ -47,6 +64,16 @@ function setError(id, errorId, msg) {
 	updateSubmitButton();
 }
 
+/**
+ * Clear the validation error UI for a form field and refresh the submit button state.
+ *
+ * Removes the "input-error" class from the input with the given id, clears the text
+ * of the error message element identified by errorId, marks the field as valid in the
+ * validity map, and calls updateSubmitButton().
+ *
+ * @param {string} id - ID of the input element to clear error styling from.
+ * @param {string} errorId - ID of the element that displays the field's error message.
+ */
 function clearError(id, errorId) {
 	document.getElementById(id).classList.remove("input-error");
 	document.getElementById(errorId).innerText = "";
@@ -54,7 +81,18 @@ function clearError(id, errorId) {
 	updateSubmitButton();
 }
 
-// -------- VALIDATION FUNCTIONS --------
+/**
+ * Validate that a form input satisfies requiredness and then trigger the appropriate field validation.
+ *
+ * If the input is empty and `isMandatory` is true, marks the field with an error message.
+ * If the input is empty and `isMandatory` is false, clears any error and marks the field valid.
+ * If the input has content, invokes the field's specific validation logic, updates validity state, and refreshes the submit button state.
+ *
+ * @param {HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement} input - The form control to validate.
+ * @param {string} errorId - The id of the element used to display the field's error message.
+ * @param {string} fieldName - Human-friendly name of the field used in error text (e.g., "First name").
+ * @param {boolean} [isMandatory=true] - Whether the field must be non-empty; optional fields will be cleared and marked valid when empty.
+ */
 function validateRequired(input, errorId, fieldName, isMandatory = true) {
 	const trimmedValue = input.value.trim();
 	const id = input.id;
@@ -76,6 +114,15 @@ function validateRequired(input, errorId, fieldName, isMandatory = true) {
 	else if (id === 'address2') validateAddress(input, errorId, false);
 }
 
+/**
+ * Validate a name input field and update its validity state and error UI.
+ *
+ * Enforces a minimum of 2 characters, a maximum of MAX_NAME_LENGTH (shows a max-length message when reached),
+ * and allows only letters and spaces. An empty trimmed value marks the field invalid and triggers submit-button update.
+ *
+ * @param {HTMLInputElement} input - The text input element containing the name to validate.
+ * @param {string} errorId - The id of the element used to display validation messages for this field.
+ */
 function validateName(input, errorId) {
 	const value = input.value.trim();
 	const id = input.id;
@@ -102,6 +149,17 @@ function validateName(input, errorId) {
 	clearError(id, errorId);
 }
 
+/**
+ * Validate an address input's length and update its error state and the form's validity.
+ * 
+ * Checks optional/mandatory status, enforces minimum and maximum address length limits,
+ * sets or clears the visible error message for the field, updates the corresponding
+ * validity flag, and refreshes the submit button state.
+ * 
+ * @param {HTMLInputElement|HTMLTextAreaElement} input - The address input element to validate.
+ * @param {string} errorId - The DOM id of the element where validation messages are displayed.
+ * @param {boolean} isMandatory - Whether the address field is required (true = required).
+ */
 function validateAddress(input, errorId, isMandatory) {
 	const value = input.value.trim();
 	const id = input.id;
@@ -124,6 +182,13 @@ function validateAddress(input, errorId, isMandatory) {
 	clearError(id, errorId);
 }
 
+/**
+ * Calculate the age from the "dob" input, enforce age bounds, and update related UI state.
+ *
+ * Reads the value of the #dob input, computes the age, and writes it to the #age input.
+ * If the DOB is empty, clears the age field, clears the DOB error state, marks the DOB as invalid, and updates the submit button.
+ * If the computed age is less than 18 or greater than 110, clears the age field and sets a DOB error message; otherwise clears any DOB error and displays the computed age.
+ */
 function calculateAge() {
 	const dobInput = document.getElementById("dob");
 	const dob = dobInput.value;
@@ -148,6 +213,19 @@ function calculateAge() {
 	}
 }
 
+/**
+ * Validate the mobile input field and update related form error state and controls.
+ *
+ * Reads the value of the #mobile input, enforces presence, disallows a leading '0',
+ * requires exactly the configured number of digits, and ensures the value matches
+ * the numeric mobile pattern. On validation failure it sets a field error and marks
+ * the mobile field invalid; on success it clears any error and triggers a server-side
+ * duplicate check.
+ *
+ * Side effects: updates `validity.mobile`, calls `updateSubmitButton()`, uses
+ * `setError()` / `clearError()` to show/hide messages, and calls `checkMobileDuplicate()`
+ * when the value is valid.
+ */
 function validateMobile() {
 	const mobile = document.getElementById("mobile").value;
 	if (mobile.length === 0) {
@@ -177,6 +255,15 @@ function validateMobile() {
 	checkMobileDuplicate(); // call duplicate check
 }
 
+/**
+ * Validate the email input, update its error state and form validity, and trigger a duplicate check when valid.
+ *
+ * Performs these observable behaviours:
+ * - If the field is empty, marks email as invalid and refreshes the submit button state.
+ * - If the field has reached the configured maximum length, clears input error, shows a max-length message, marks email as valid, and refreshes the submit button state.
+ * - If the field has an invalid email format, sets an error message and marks the field invalid.
+ * - If the field is valid, clears any error and invokes a server-side duplicate check.
+ */
 function validateEmail() {
 	const email = document.getElementById("email").value;
 	if (email.length === 0) {
@@ -199,12 +286,21 @@ function validateEmail() {
 	checkEmailDuplicate(); // call duplicate check
 }
 
+/**
+ * Mark the gender field valid and update the submit button state.
+ *
+ * Sets the gender validity flag and re-evaluates whether the form submit control should be enabled.
+ */
 function setGender() {
 	validity.gender = true;
 	updateSubmitButton();
 }
 
-// -------- FORM RESET / CANCEL --------
+/**
+ * Reset the employee form to its initial state and refresh validation state.
+ *
+ * Clears all form inputs, removes input error styling, clears visible error messages, resets internal validity flags (marks the optional address2 as valid), and updates the submit button state.
+ */
 function clearForm() {
 	document.getElementById('employeeForm').reset();
 
@@ -216,11 +312,20 @@ function clearForm() {
 	updateSubmitButton();
 }
 
+/**
+ * Navigate the browser to the employee list page.
+ */
 function goToList() {
 	window.location.href = "employee-list";
 }
 
-// -------- EDIT MODE --------
+/**
+ * Load an employee by id and populate the form for editing.
+ *
+ * Fetches the employee record from the server, switches the UI into edit mode, fills the form inputs (including age and gender),
+ * saves the fetched values to `originalData` for change detection, marks all validity flags as true, updates the form heading, and re-renders action buttons.
+ * @param {number|string} id - Employee identifier to retrieve from the API.
+ */
 function loadEmployeeForEdit(id) {
 	axios.get(API_URL + "/" + id, { withCredentials: true })
 		.then(res => {
@@ -251,6 +356,12 @@ function loadEmployeeForEdit(id) {
 		});
 }
 
+/**
+ * Determine whether any tracked form field value differs from the originally loaded employee data.
+ *
+ * Checks firstName, lastName, dob, mobile, email, address1, address2, and gender for differences.
+ * @returns {boolean} `true` if any tracked field has changed compared to `originalData`, `false` otherwise.
+ */
 function hasChanges() {
 	return (document.getElementById("firstName").value !== originalData.firstName ||
 		document.getElementById("lastName").value !== originalData.lastName ||
@@ -262,7 +373,14 @@ function hasChanges() {
 		document.querySelector('input[name="gender"]:checked')?.value !== originalData.gender);
 }
 
-// -------- DUPLICATE CHECK API --------
+/**
+ * Checks whether the current email is already in use by another employee.
+ *
+ * If the email input is non-empty, queries the server for duplicates and, based on the response,
+ * marks the email field as errored with the message "Email already exists" when a duplicate is found
+ * or clears any existing email error when the email is unique. In edit mode, the current employee's
+ * id is included so the check excludes the employee being edited.
+ */
 function checkEmailDuplicate() {
 	const email = document.getElementById("email").value.trim();
 	if (email.length === 0) return;
@@ -288,6 +406,11 @@ function checkEmailDuplicate() {
 		.catch(err => console.error("Email check failed", err));
 }
 
+/**
+ * Checks whether the current mobile input value is already used by another employee and updates the mobile field's error state.
+ *
+ * If the mobile input is empty the function returns immediately. When in edit mode the current employee `id` is included from the URL query to exclude that record from the duplicate check. On a positive duplicate result the mobile field is marked with an error message; otherwise the mobile error is cleared.
+ */
 function checkMobileDuplicate() {
 	const mobile = document.getElementById("mobile").value.trim();
 	if (mobile.length === 0)
@@ -314,7 +437,12 @@ function checkMobileDuplicate() {
 		.catch(err => console.error("Mobile check failed", err));
 }
 
-// -------- DYNAMIC BUTTON RENDER --------
+/**
+ * Render the form action buttons appropriate for the current mode (create or edit).
+ *
+ * In edit mode this displays Cancel and Update Employee buttons; in create mode it displays Clear Form and Register Employee buttons.
+ * The submit button is initialized disabled and action buttons are wired to their respective handlers (navigation, form reset, or submit).
+ */
 function renderButtons() {
 	const btnContainer = document.getElementById("formButtons");
 	btnContainer.innerHTML = "";
