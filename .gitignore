@@ -7,3 +7,6 @@ EmployeeRegistrationSystem/*
 !practicals/src/
 !EmployeeRegistrationSystem/src/
 
+# Ignore Maven build output
+**/target/
+
